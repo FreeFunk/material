@@ -39,7 +39,7 @@ public class MaterialAboutUsController extends BaseController{
 		ModelAndView modelAndView = new ModelAndView();
 		query.getQueryObj().setDataState("1");
 		service.listPage(query);
-		//第一次修改代码
+		//第一次修改代码 1
 		buildResponse(modelAndView,query);
 		return modelAndView;
 	}
