@@ -1,0 +1,28 @@
+#日志配置
+logging:
+  config: log4j2-spring.xml
+  level:
+    com.edgedo: info
+#是否开启定时任务
+app.scheduling.enable: false
+#定时任务线程数量
+app.scheduling.threadnum: 10
+#是否启用mvc
+app.springmvc.enable: true
+#启用shiro 权限校验
+app.shiro.enable: true
+#启用mybatis扫描
+app.mybatis.enable: true
+#小程序过滤器
+app.shiro.wxMiniProgramFilter: true
+#token超时时间1个小时
+app.commonTokenTimeOutSec: 3600
+#目标文件夹
+app.fileForder: D:\societytrain
+#微信公众平台原始id
+app.wx_minprogram.oraId: gh_5378ffe5ec65
+#小程序应用id
+app.wx_minprogram.appid: wxbc4e48231571f47e
+#小程序的秘钥2d1630105272af42d87114b99dad7570
+app.wx_minprogram.appScre: 080000000000000033843F8213D06FB45D7F1BCCCCAC8CCCCC0FA4F2BA84E284A2F0A49CCC07BCF23F9C63B49880C0FC82D063A882A077434763A0B0844FE4C22B07C23794FC179C500093D87C1904000000
+

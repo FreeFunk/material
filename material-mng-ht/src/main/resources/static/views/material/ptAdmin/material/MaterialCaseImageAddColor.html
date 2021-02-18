@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialCaseImage-form" id="MaterialCaseImage-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <div hidden class="layui-form-item layui-hide">
+            <label class="layui-form-label">分类名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseClsId" class="layui-input">
+            </div>
+        </div>
+        <div hidden class="layui-form-item layui-hide">
+            <label class="layui-form-label">分类名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseClsName" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div hidden class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item layui-hide">
+                <label class="layui-form-label">所属材料ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialId" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">材料名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="materialName" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div hidden class="layui-col-xs6 layui-col-sm6 layui-col-md6 layui-hide">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属精品案例ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="caseId" placeholder="请输入所属精品案例ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">原图</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="orgImageUrlUpload">多图片上传</button>
+                    <div class="layui-upload-list">
+                        <label class="layui-form-label" style="position: absolute;font-size:13px;left: -119%;">封面图</label>
+                        <div id="imgDiv">
+
+                        </div>
+                        <input type="hidden" id="orgImageUrl" name="orgImageUrl"  class="layui-input">
+                        <!--<p id="demoText"></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialCaseImage-form-submit" id="MaterialCaseImage-form-submit" value="确认添加">
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialCaseImage-form-casecls" id="MaterialCaseImage-form-casecls" value="继续添加案例分类">
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialCaseImage-form-case" id="MaterialCaseImage-form-case" value="继续添加案例信息">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        viewer: 'layui_ext/viewer/viewer',
+        $tool:'tool',
+    }).use(['index', 'form','laydate','upload','viewer','$tool'], function(){
+        var $ = layui.$
+            ,laydate = layui.laydate
+            ,upload  = layui.upload
+            ,admin  = layui.admin
+            ,viewer = layui.viewer
+            ,$tool = layui.$tool
+            ,form = layui.form;
+
+        var headers = layui.admin.getTokenHeader();
+        var imageUrlUpload = upload.render({
+            elem: '#orgImageUrlUpload'
+            ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn' //改成您自己的上传接口
+            ,headers:headers
+            ,multiple: true
+            ,accept:'images'
+            ,acceptMime:'image/*'
+            ,size:5120*10 //设置文件最大可允许上传的大小，单位 KB
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                obj.preview(function(index, file, result){
+                    var html = $('#imgDiv').html();
+                    if(html==null || html.length==0){
+                        $('#imgDiv').html('<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">');
+                    }else {
+                        html = html +  '<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">';
+                        $('#imgDiv').html(html);
+                    }
+                });
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                var orgImageUrl = $("#orgImageUrl").val();
+                if(orgImageUrl==''){
+                    $('#orgImageUrl').val(res.data);
+                }else {
+                    $('#orgImageUrl').val(orgImageUrl+','+res.data);
+                }
+
+            }
+        });
+        //点击图片变大
+        getImg = function (value) {
+            $(value.parentElement.parentElement).viewer();
+        }
+
+        //监听提交
+        form.on('submit(MaterialCaseImage-form-submit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            var materialName = field.materialName;
+            var materialId = field.materialId;
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            admin.req({
+                url:layui.setter.basePath +'/material/materialCaseImage/insertNew.jsn',
+                data:field,
+                method:"post",
+                success:function (data) {
+                    if(data.success){
+                        parent.layer.close(index); //再执行关闭
+                        parent.layer.open({
+                            type: 2
+                            ,title: materialName+'产品介绍维护'
+                            ,content: 'MaterialProductIntroductionAdd.html'
+                            ,maxmin: true
+                            ,area: ['600px', '450px']
+                            ,btn: ['下一步', '关闭']
+                            ,success: function(layero, index){
+                                var othis = layero.find('iframe').contents().find("#MaterialBanner-form").click();
+
+                                othis.find('input[name="materialId"]').val(materialId);
+                                othis.find('input[name="materialName"]').val(materialName);
+                            }
+                            ,yes: function(index, layero){
+                                var submit = layero.find('iframe').contents().find("#MaterialBanner-form-submit");
+                                submit.trigger('click');
+                            }
+                        })
+                    }else{
+                        parent.layer.msg(data.errMsg, {
+                        });
+                    }
+
+                },
+            });
+
+        });
+
+
+
+        //监听提交
+        form.on('submit(MaterialCaseImage-form-casecls)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            var materialName = field.materialName;
+            var materialId = field.materialId;
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            admin.req({
+                url:layui.setter.basePath +'/material/materialCaseImage/insertNew.jsn',
+                data:field,
+                method:"post",
+                success:function (data) {
+                    if(data.success){
+                        parent.layer.close(index); //再执行关闭
+                        parent.layer.open({
+                            type: 2
+                            ,title: materialName+'色卡分类维护'
+                            ,content: 'MaterialCaseClsAddColor.html'
+                            ,maxmin: true
+                            ,area: ['600px', '450px']
+                            ,btn: ['下一步','关闭']
+                            ,success: function(layero, index){
+                                var othis = layero.find('iframe').contents().find("#MaterialCaseCls-form").click();
+                                othis.find('input[name="materialName"]').val(materialName);
+                                othis.find('input[name="materialId"]').val(materialId);
+                            }
+                            ,yes: function(index, layero){
+                                var submit = layero.find('iframe').contents().find("#MaterialCaseCls-form-submit");
+                                submit.trigger('click');
+                            }
+                        })
+                    }else{
+                        parent.layer.msg(data.errMsg, {
+                        });
+                    }
+
+                },
+            });
+
+        });
+
+        //监听提交
+        form.on('submit(MaterialCaseImage-form-case)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            var materialName = field.materialName;
+            var materialId = field.materialId;
+            var caseClsId = field.caseClsId;
+            var caseClsName = field.caseClsName;
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            admin.req({
+                url:layui.setter.basePath +'/material/materialCaseImage/insertNew.jsn',
+                data:field,
+                method:"post",
+                success:function (data) {
+                    if(data.success){
+                        parent.layer.close(index); //再执行关闭
+                        parent.layer.open({
+                            type: 2
+                            ,title: materialName+'色卡信息维护'
+                            ,content: 'MaterialCaseAddColor.html'
+                            ,maxmin: true
+                            ,area: ['600px', '450px']
+                            ,btn: ['下一步','关闭']
+                            ,success: function(layero, index){
+                                var othis = layero.find('iframe').contents().find("#MaterialCase-form").click();
+                                othis.find('input[name="materialName"]').val(materialName);
+                                othis.find('input[name="materialId"]').val(materialId);
+                                othis.find('input[name="caseClsId"]').val(caseClsId);
+                                othis.find('input[name="caseClsName"]').val(caseClsName);
+                            }
+                            ,yes: function(index, layero){
+                                var submit = layero.find('iframe').contents().find("#MaterialCase-form-submit");
+                                submit.trigger('click');
+                            }
+                        })
+                    }else{
+                        parent.layer.msg(data.errMsg, {
+                        });
+                    }
+
+                },
+            });
+
+        });
+        laydate.render({
+            elem: '#createTime', //指定元素
+            type:'datetime'
+        });
+    })
+</script>
+</body>
+</html>

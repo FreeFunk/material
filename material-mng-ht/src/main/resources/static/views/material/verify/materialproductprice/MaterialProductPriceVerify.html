@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html id="materialContent">
+<head>
+    <meta charset="utf-8">
+    <title>材料产品报价</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<style>
+    .imgStyle{
+        width:80%;
+        height:200px;
+        margin-left:10%;
+    }
+</style>
+<body>
+
+<div class="layui-form" lay-filter="MaterialDetail-form" id="MaterialDetail-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">主键</label>
+            <div class="layui-input-block">
+                <input type="text" id="id" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">厂商名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="createUserName" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">材料名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="materialName" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">报价名称</label>
+            <div class="layui-input-block">
+                <input type="text" id="productPriceName" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="width: 96%;margin-left: 4%;">
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">报价图片</div>
+                    <div class="layui-card-body">
+                        <img id="imageUrl" onclick="getImg(this)" class="imgStyle" src=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs8 layui-col-sm18 layui-col-md8">
+                <div class="layui-card">
+                    <div class="layui-card-header">报价文件</div>
+                    <div class="layui-card-body">
+                        <table class="layui-table">
+                            <thead>
+                            <tr>
+                                <th>文件名称</th>
+                                <th>文件类型</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="priceFileCon">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label">启用状态</label>
+            <div class="layui-input-block">
+                <input type="text" id="isEnable" disabled class="layui-input">
+            </div>
+        </div>-->
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="Material-form-detail" id="Material-form-detail" value="提交审核">
+    </div>
+</div>
+
+<script id="PriceFileTemplate" type="text/html">
+    {{#  layui.each(d.data, function(index, item){ }}
+    <tr>
+        <td>{{item.fileName}}</td>
+        <td>{{item.fileType}}</td>
+        <td><button type="button" onclick="downLoadFile('{{item.fileUrl}}')" class="layui-btn layui-btn-sm layui-btn-normal">下载文件</button></td>
+    </tr>
+    {{#  }); }}
+    {{#  if(d.data.length === 0){ }}
+        未上传文件
+    {{#  } }}
+</script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            $tool:'tool',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','$tool','laydate','viewer','upload','laytpl'], function(){
+
+            var $ = layui.$
+                ,$tool = layui.$tool
+                ,laydate = layui.laydate
+                ,admin = layui.admin
+                ,upload  = layui.upload
+                ,viewer = layui.viewer
+                ,laytpl = layui.laytpl
+                ,form = layui.form;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+
+            var imgHost = layui.setter.ImgPath;
+
+            //加载报价信息
+            loadInfoById();
+
+            //加载文件信息
+            loadFileInfoById();
+
+            function loadInfoById(){
+                var id = $("#id").val();
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialProductPrice/loadById.jsn",
+                    method:'post',
+                    data:{"id":id},
+                    success:function(data){
+                        if(data.success){
+                            //展示审核页面
+                            var materialPrice = data.data;
+                            $("#createUserName").val(materialPrice.createUserName);
+                            $("#materialName").val(materialPrice.materialName);
+                            $("#productPriceName").val(materialPrice.productPriceName);
+                            $("#imageUrl").attr("src",imgHost+materialPrice.imageUrl);
+                            var isEnable = materialPrice.isEnable;
+                            if(isEnable=='1'){
+                                $("#isEnable").val("已启用");
+                            }else{
+                                $("#isEnable").val("未启用");
+                            }
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+            //查询关联文件信息
+            function loadFileInfoById(){
+                var id = $("#id").val();
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialProductPriceFile/listByPriceId.jsn",
+                    method:'post',
+                    data:{"priceId":id},
+                    success:function(data){
+                        if(data.success){
+                            debugger;
+                            var getTpl = document.getElementById("PriceFileTemplate").innerHTML
+                                ,view = document.getElementById('priceFileCon');
+                            laytpl(getTpl).render(data, function(html){
+                                view.innerHTML = html;
+                            });
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+            //下载文件
+            downLoadFile = function(filePath){
+                if(filePath != null && filePath != ''){
+                    var fileUrl = imgHost + filePath;
+                    window.location.href = fileUrl;
+                    layer.msg("文件已下载");
+                }
+            }
+        })
+</script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+/* 我的 */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/*上面的标题*/
+.all_title {
+    margin: 12rpx 10rpx;
+    width: 730rpx;
+    height: 362rpx;
+    border-radius: 8rpx;
+}
+
+/* 头像和昵称的view */
+.all_title .photoAndName {
+    display: flex;
+    padding-top: 58rpx;
+    margin-bottom: 52rpx;
+}
+
+/* 头像 */
+.all_title .photoAndName .userphoto {
+    margin-left: 37rpx;
+    width: 114rpx;
+    height: 114rpx;
+    border-radius: 50%;
+    border: 1rpx solid #f0f0f0;
+}
+
+/* 皇冠 + 名称的view*/
+.all_title .photoAndName .nameView {
+    margin-left: 36rpx;
+    margin-top: 10rpx;
+}
+
+/* 皇冠图片 */
+.all_title .photoAndName .nameView .vipLogo {
+    width: 49rpx;
+    height: 38rpx;
+    margin-bottom: 18rpx;
+}
+
+/* 昵称 */
+.all_title .photoAndName .nameView view {
+    padding-left: 4rpx;
+    font-size: 33rpx;
+    color: #000000
+}
+
+/* 下面的页面显示选择按钮 */
+.all_title .pageNameBtnView {
+    display: flex;
+}
+
+/* 按钮的view */
+.all_title .pageNameBtnView .btnView {
+    height: 83rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 按钮的文字 */
+.all_title .pageNameBtnView .btnText {
+    font-size: 26rpx;
+    height: 41rpx;
+    padding-top: 15rpx;
+    color: #000000;
+}
+
+/* 收藏 - 图标大小 */
+.collectIconImg {
+    width: 44rpx;
+    height: 44rpx;
+}
+.collectIconImg_select{
+    width: 36rpx;
+    height: 36rpx;
+}
+
+/* 足迹 - 图标大小 */
+.zujiIconImg {
+    width: 35rpx;
+    height: 44rpx;
+}
+
+/* 足迹 - 清除记录 */
+.clearHistoryBtn {
+    text-align: right;
+    font-size: 20rpx;
+    margin: 10rpx;
+    color: #333333;
+    padding-right: 20rpx;
+}
+
+/* 足迹 - 没有数据 */
+.currentCard-noData {
+    background-color: white;
+    text-align: center;
+    font-size: 22rpx;
+}
+
+/* 瀑布流的中间占位符 */
+.placeHolderView {
+    width: 6rpx;
+    height: 100%;
+}
+
+/* 通告 - 图标大小 */
+.informIconImg {
+    width: 35rpx;
+    height: 43rpx;
+}
+
+/* 通告 - 有新消息提示的红色点点 */
+.all_title .pageNameBtnView .btnView .newMsg {
+    width: 20rpx;
+    height: 20rpx;
+    background-color: #fc3d37;
+    border-radius: 50%;
+    position: absolute;
+    top: -5rpx;
+    right: 28%;
+}
+
+.kefu {
+    display: flex;
+    justify-content: center
+}
+
+/* 我们 - 图标大小 */
+.usPageIconImg {
+    width: 43rpx;
+    height: 43rpx;
+}
+
+/* 下面的内容区域 view */
+.scrollDiv {
+    margin: 0;
+    width: 750rpx;
+}
+
+.all_Content {
+    margin: 5rpx 10rpx;
+    width: 730rpx;
+}
+
+/* 瀑布流 */
+.all_Content .waterFull {
+    display: flex;
+}
+
+/* 瀑布流左边 view */
+.all_Content .waterFull .left {
+    width: 362rpx;
+    margin-left: 4rpx;
+}
+
+.all_Content .waterFull .right {
+    width: 362rpx;
+    margin-right: 4rpx;
+}
+
+/* 描述与收藏 */
+.descAndCollectDiv {
+    padding-top: 20rpx;
+    padding-left: 11rpx;
+    padding-bottom: 17rpx;
+    height: 120rpx;
+}
+
+/* 描述与收藏 描述 */
+.descAndCollectDiv .desc {
+    color: #333333;
+    width: 340rpx;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* 描述与收藏 收藏的div */
+.collectDiv {
+    margin-top: 22rpx;
+    display: flex;
+    align-items: center;
+}
+
+/* 删除按键 */
+.imageDlete {
+    width: 24rpx;
+    height: 29rpx;
+}
+
+/* 收藏的按键 */
+.imageCollect {
+    width: 24rpx;
+    height: 24rpx;
+}
+
+/* 描述与收藏 收藏 文字 */
+.haveIconText {
+    font-size: 22rpx;
+    margin-left: 10rpx;
+}
+
+/* 通告时间文字 */
+.noIconText {
+    font-size: 22rpx;
+    color: #9e9e9e;
+}
+
+/* 视频的暂停按钮 */
+.video_cover {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* 视频的按钮自定义 */
+.video_play_icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    z-index: 5
+}
+
+/* 视频的背景 */
+.video_bg_black {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, .5);
+}
+
+button {
+    color: #333333;
+}
+
+.kefuContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.kefuContent view {
+    font-size: 26rpx;
+    padding-top: 20rpx;
+    color: #000000
+}
+
+.kefuContent image {
+    width: 44rpx;
+    height: 39rpx;
+}
+
+/* 我的足迹 -删除 */
+.footmarkDelView {
+    margin-left: 119rpx;
+    width: 504rpx;
+    height: 272rpx;
+    border-radius: 13rpx;
+    margin-top: 400rpx
+}
+
+/* 足迹删除 - 今天 */
+.footmarkDelView .jintian {
+    height: 91rpx;
+    border-bottom: 1rpx solid #d2d2d2;
+    text-align: center;
+    font-size: 25rpx;
+    line-height: 90rpx;
+    color: #333333
+}
+
+/* 足迹删除 - 过去一周 */
+.footmarkDelView .passWeek {
+    height: 91rpx;
+    border-bottom: 1rpx solid #d2d2d2;
+    text-align: center;
+    font-size: 25rpx;
+    line-height: 90rpx;
+    color: #333333
+}
+
+/* 足迹删除 - 所有时间 */
+.footmarkDelView .allTime {
+    height: 90rpx;
+    text-align: center;
+    font-size: 25rpx;
+    line-height: 90rpx;
+    color: #333333
+}
+
+/* 足迹删除 - 取消按钮 */
+.cancelCss {
+    margin-left: 119rpx;
+    width: 504rpx;
+    text-align: center;
+    font-size: 25rpx;
+    height: 82rpx;
+    line-height: 82rpx;
+    border-radius: 13rpx;
+    margin-top: 7rpx;
+    color: #000000;
+}
+
+/* 删除的外边框; */
+.dialog_mine_delete {
+    margin-left: 119rpx;
+    width: 504rpx;
+    height: 284rpx;
+    border-radius: 13rpx;
+    margin-top: 400rpx;
+}
+
+/* 删除的内容框 */
+.dialog_mine_delete .content {
+    height: 206rpx;
+    width: 100%;
+    border-bottom: 1px solid #d2d2d2;
+    position: relative;
+}
+
+/* 删除的内容标题 */
+.dialog_mine_delete .content .title {
+    color: #000000;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 60rpx;
+}
+
+/* 删除的内容描述 */
+.dialog_mine_delete .content .desc {
+    font-size: 25rpx;
+    width: 100%;
+    text-align: center;
+    top: 138rpx;
+    position: absolute;
+    color: #333333;
+}
+
+/* 删除的取消按钮 */
+.dialog_mine_delete .cancelBtn {
+    width: 253rpx;
+    border-right: 1px solid #d2d2d2;
+    height: 79rpx;
+    line-height: 78rpx;
+    text-align: center;
+    color: #999999;
+}
+
+/* 删除的确定按钮 */
+.dialog_mine_delete .confirmBtn {
+    width: 253rpx;
+    border-right: 1px solid #d2d2d2;
+    height: 79rpx;
+    line-height: 78rpx;
+    text-align: center;
+    color: #000000;
+}

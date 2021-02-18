@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html id="materialContent">
+<head>
+    <meta charset="utf-8">
+    <title>材料详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<style>
+    .imgStyle{
+        width:80%;
+        height:200px;
+        margin-left:10%;
+    }
+</style>
+<body>
+
+<div class="layui-form" lay-filter="MaterialDetail-form" id="MaterialDetail-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">主键</label>
+            <div class="layui-input-block">
+                <input type="text" id="id" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品介绍信息</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">厂商名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="createUserName" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">材料名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="materialName" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <!--<div class="layui-form-item">
+                            <label class="layui-form-label">启用状态</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="isEnable" disabled class="layui-input">
+                            </div>
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品介绍文件</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item" id="fileImgCon" style="display: none;">
+                            <img id="productFileImg" class="imgStyle" src=""/>
+                        </div>
+                        <div class="layui-form-item" id="fileCon" style="display: none;">
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>文件名称</th>
+                                    <th>文件类型</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td id="fileName"></td>
+                                    <td id="fileType"></td>
+                                    <td>
+                                        <input type="hidden" id="fileUrl"/>
+                                        <button type="button" onclick="downLoadFile()" class="layui-btn layui-btn-sm layui-btn-normal">下载文件</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="Material-form-detail" id="Material-form-detail" value="提交审核">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            $tool:'tool',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','$tool','laydate','viewer','upload'], function(){
+
+            var $ = layui.$
+                ,$tool = layui.$tool
+                ,laydate = layui.laydate
+                ,admin = layui.admin
+                ,upload  = layui.upload
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            var imgHost = layui.setter.ImgPath;
+
+            //加载产品介绍文件
+            loadInfoById();
+
+            function loadInfoById(){
+                var id = $("#id").val();
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialProductIntroduction/loadById.jsn",
+                    method:'post',
+                    data:{"id":id},
+                    success:function(data){
+                        if(data.success){
+                            //展示审核页面
+                            var productIntro = data.data;
+                            $("#materialName").val(productIntro.materialName);
+                            $("#createUserName").val(productIntro.createUserName);
+                            var isEnable = productIntro.isEnable;
+                            if(isEnable=='1'){
+                                $("#isEnable").val("已启用");
+                            }else{
+                                $("#isEnable").val("未启用");
+                            }
+                            var fileUrl = productIntro.fileUrl;
+                            var fileType = productIntro.fileType;
+                            if(fileType.indexOf("image")>-1){
+                                $("#fileImgCon").css("display","");
+                                $("#productFileImg").attr("src",imgHost+fileUrl);
+                            }else{
+                                $("#fileCon").css("display","");
+                                $("#fileName").html(productIntro.fileName);
+                                $("#fileType").html(productIntro.fileType);
+                                $("#fileUrl").val(fileUrl);
+                            }
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+            //下载文件
+            downLoadFile = function(){
+                var filePath = $("#fileUrl").val();
+                if(filePath != null && filePath != ''){
+                    var fileUrl = imgHost + filePath;
+                    window.location.href = fileUrl;
+                    layer.msg("文件已下载");
+                }
+            }
+
+        })
+</script>
+</body>
+</html>

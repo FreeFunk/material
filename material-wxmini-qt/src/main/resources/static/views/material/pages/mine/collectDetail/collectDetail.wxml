@@ -1,0 +1,27 @@
+<!-- 案例详情 -->
+<import src="/pages/template/template.wxml" />
+<view style="padding-bottom:98rpx;">
+	<!-- 上面的图片 + 编码 + 底部线 -->
+	<view class="imageDiv">
+		<image bindtap="previewImages" mode="widthFix" src="{{imageHost + currentCase.showImageUrl}}"></image>
+		<view class="mingcheng">{{currentCase.caseName}}</view>
+		<view class="jieshao">{{currentCase.caseDesc}}</view>
+	</view>
+	<!-- 下面的收藏 + 下载 -->
+	<view style="position:relative" style="height:100rpx;">
+		<view class="collecDownLoadDiv">
+			<view class="collect" bindtap="collectSuccess">
+				<image wx:if="{{isCollection !='1'}}" src="/images/icon/collect.png"></image>
+				<image wx:if="{{isCollection=='1'}}" src="/images/icon/collected.png"></image>
+				<text>收藏</text>
+			</view>
+			<view class="download" bindtap="downloadImg">
+				<image src="/images/icon/download.png"></image>
+				<text>下载原图</text>
+			</view>
+		</view>
+	</view>
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />
+<template is="downloadIng" data="{{downloadIngFlag}}" />

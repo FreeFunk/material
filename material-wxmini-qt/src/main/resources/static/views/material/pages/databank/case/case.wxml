@@ -1,0 +1,69 @@
+<!-- 精品案例 -->
+<import src="/pages/template/template.wxml" />
+<!-- 最上层的标签 -->
+<!-- <view wx:if="{{!noDataNowFlag}}"> -->
+<view class="con">
+	<view class="top">
+		<view class="headerTags">
+			<scroll-view scroll-left="{{scrollX}}" scroll-with-animation="true" scroll-x="true" style="white-space:nowrap;overflow:hidden;padding-right:140rpx;">
+				<block wx:for="{{titleTags}}" wx:key="index">
+					<view bindtap="clickTitleTags" data-type="show" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'tagSelected':'tag'}}">{{item.caseClsName}}</view>
+				</block>
+			</scroll-view>
+			<view bindtap="openAllTags" class="allTagsBtn">
+				全部
+				<text class="lg text-gray {{openAllTagsFlag?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+			</view>
+		</view>
+	</view>
+	<!-- 展开的标签内容 -->
+	<view wx:if="{{openAllTagsFlag}}" class="bg-white allHideTags">
+		<block wx:for="{{titleTags}}" wx:key="index">
+			<view bindtap="clickTitleTags" data-type="hide" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'hideTags_selected':'hideTags'}}">{{item.caseClsName}}</view>
+		</block>
+	</view>
+	<!-- 中间案例卡片 -->
+	<view class="scroll" wx:if="{{!thisTagNoDataFlag}}">
+		<scroll-view scroll-y style="height:100%;" bindscrolltolower="nextPage" scroll-into-view="{{toView}}">
+			<!-- 将卡片分成两列 -->
+			<!-- 瀑布流实现; -->
+			<!-- 第一列 -->
+			<view  class="list" style="margin-left: 4rpx;float:left">
+				<view class="list-item" wx:for="{{leftList}}" wx:key="index">
+					<view style="position:relative">
+						<image bindtap="jumpToCaseDetail" data-item="{{item}}" src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+						<view class="collect" bindtap="collectSuccess" data-index="{{index}}" data-collectionobj="{{item}}">
+							<image wx:if="{{item.isCollection=='0'}}" src="/images/icon/collect.png"></image>
+							<image wx:if="{{item.isCollection=='1'}}" src="/images/icon/collected.png"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view style="width:6rpx;"></view>
+			<!-- 第二列 -->
+			<view  class="list" style="marign-right:4rpx;float:right">
+				<view class="list-item" wx:for="{{rightList}}" wx:key="index">
+					<view style="position:relative">
+						<image bindtap="jumpToCaseDetail" data-item="{{item}}" src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+						<view class="collect" bindtap="collectSuccess" data-index="{{index}}" data-collectionobj="{{item}}">
+							<image wx:if="{{item.isCollection=='0'}}" src="/images/icon/collect.png"></image>
+							<image wx:if="{{item.isCollection=='1'}}" src="/images/icon/collected.png"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+	<view class="bg-white" wx:if="{{thisTagNoDataFlag}}" style="text-align:center;height: {{ktxWindowHeight-98}}rpx;">
+		<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+		暂无数据
+	</view>
+</view>
+<!-- </view> -->
+<view wx:if="{{noDataNowFlag}}" style="padding-bottom:98rpx;height:{{ktxWindowHeight}}rpx;text-align:center" class="bg-white">
+	<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+	暂无数据
+</view>
+
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

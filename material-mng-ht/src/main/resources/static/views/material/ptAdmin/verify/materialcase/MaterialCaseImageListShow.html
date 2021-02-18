@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto layui-hide" lay-filter="MaterialCaseImageList-form" id="MaterialCaseImageList-form">
+            <div class="layui-form-item">
+                <input type="hidden" name="caseId" id="caseId"/>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="MaterialCaseImage-list" lay-filter="MaterialCaseImage-list"></table>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index:'lib/index',
+            common:'common',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index','table', 'form','common','viewer'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,common = layui.common
+                ,admin = layui.admin
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            /*
+            * 定义表格
+            * */
+            defineTable = function () {
+                var caseId = $("#caseId").val();
+                var headers = layui.admin.getTokenHeader();
+                table.render({
+                    elem: '#MaterialCaseImage-list' //指定原始表格的选择器（id选择器）
+                    ,url:layui.setter.basePath +'/material/materialCaseImage/listpage.jsn' //模拟接口
+                    ,headers:headers
+                    ,method: 'post'
+                    ,where:{"queryObj.caseId":caseId}
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.success, //解析接口状态
+                            "msg": res.errMsg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.list //解析数据列表
+                        };
+                    }
+                    ,response: {
+                        statusCode: true //规定成功的状态码，默认：0
+                    }
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id',align: 'center', width: 200, title: '主键',sort: true,hide:true}
+                    ,{field: 'createTime',align: 'center', width: 140, title: '创建时间',templet: function(d){
+                    return common.DateFormat(d.createTime,"yyyy-MM-dd");},sort: true}
+            ,{field: 'caseMiniImg',align: 'center', width: '25%', title: '缩略图',sort: false,templet:function(d){
+                if(d.caseMiniImg!=null && d.caseMiniImg!=''){
+                    return "<img src='"+d.caseMiniImg+"' onclick='getImg(this)' style='height: 30px;'/>"
+                }else{
+                    return "未上传";
+                }
+            }}
+            ,{field: 'showImageUrl',align: 'center', width: '25%', title: '展示图',sort: false,templet:function(d){
+                if(d.showImageUrl!=null && d.showImageUrl!=''){
+                    return "<img src='"+d.showImageUrl+"' onclick='getImg(this)' style='height: 30px;'/>"
+                }else{
+                    return "未上传";
+                }
+            }}
+            ,{field: 'orgImageUrl',align: 'center', width: '25%', title: '原图',sort: false,templet:function(d){
+                if(d.orgImageUrl!=null && d.orgImageUrl!=''){
+                    return "<img src='"+d.orgImageUrl+"' onclick='getImg(this)' style='height: 30px;'/>"
+                }else{
+                    return "未上传";
+                }
+            }}
+            //,{title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-MaterialCaseImage-list'}
+            ]]
+            ,autoSort: false
+                    ,page: true
+                    ,limit: 10
+                    ,limits: [10, 20, 30,40]
+                    ,text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+                //为toolbar添加事件响应
+                table.on('tool(MaterialCaseImage-list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    /*var data = obj.data;*///获得当前行数据
+                    //区分事件
+                    switch(obj.event){
+
+                    };
+                });
+
+                //监听排序事件
+                table.on('sort(MaterialCaseImage-list)', function(obj){ //注：sort是工具条事件名，LAY-app-province-list是table原始容器的属性 lay-filter="对应的值"
+                    var sort = obj.field;
+                    //默认排序
+                    switch(obj.field){
+                        case 'id':
+                            sort ="ID";
+                            break;
+                        case 'createTime':
+                            sort ="CREATE_TIME";
+                            break;
+                        case 'createUserId':
+                            sort ="CREATE_USER_ID";
+                            break;
+                        case 'caseId':
+                            sort ="CASE_ID";
+                            break;
+                        case 'caseMiniImg':
+                            sort ="CASE_MINI_IMG";
+                            break;
+                        case 'showImageUrl':
+                            sort ="SHOW_IMAGE_URL";
+                            break;
+                        case 'orgImageUrl':
+                            sort ="ORG_IMAGE_URL";
+                            break;
+                        case 'orderNum':
+                            sort ="ORDER_NUM";
+                            break;
+                        case 'dataState':
+                            sort ="DATA_STATE";
+                            break;
+                    };
+                    if(obj.type==null){
+                        return;
+                    }
+                    //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                    table.reload('MaterialCaseImage-list', {
+                        initSort: obj//记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                        ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                            orderBy: sort+" "+obj.type //排序字段
+                        }
+                    });
+                });
+            }
+            defineTable();
+
+        });
+
+</script>
+</body>
+</html>
+

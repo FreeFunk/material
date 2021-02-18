@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialBuildIntroductionMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialBuildIntroduction" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="CREATE_USER_NAME" property="createUserName"/>
+			<result column="MATERIAL_ID" property="materialId"/>
+			<result column="MATERIAL_NAME" property="materialName"/>
+			<result column="BUILD_TITLE" property="buildTitle"/>
+			<result column="BUILD_ABSTRACT" property="buildAbstract"/>
+			<result column="BUILD_CONTENT" property="buildContent"/>
+			<result column="FILE_TYPE" property="fileType"/>
+			<result column="FILE_URL" property="fileUrl"/>
+			<result column="DATA_STATE" property="dataState"/>
+			<result column="SH_STATE" property="shState"/>
+			<result column="NOT_PASS_TEXT" property="notPassText"/>
+			<result column="SH_USER_ID" property="shUserId"/>
+			<result column="SH_USER_NAME" property="shUserName"/>
+			<result column="SH_TIME" property="shTime"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialBuildIntroductionView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, CREATE_USER_NAME, MATERIAL_ID, MATERIAL_NAME, BUILD_TITLE, BUILD_ABSTRACT, BUILD_CONTENT, FILE_TYPE, FILE_URL, DATA_STATE, SH_STATE, NOT_PASS_TEXT, SH_USER_ID, SH_USER_NAME, SH_TIME
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		DATA_STATE='1'
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserName)'>
+		AND  CREATE_USER_NAME = #{queryObj.createUserName}
+		</if>
+		<if test='queryObj != null and  queryObj.materialId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.materialId)'>
+		AND  MATERIAL_ID = #{queryObj.materialId}
+		</if>
+		<if test='queryObj != null and  queryObj.materialName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.materialName)'>
+		AND  MATERIAL_NAME = #{queryObj.materialName}
+		</if>
+		<if test='queryObj != null and  queryObj.buildTitle != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.buildTitle)'>
+		AND  BUILD_TITLE LIKE concat('%',#{queryObj.buildTitle},'%')
+		</if>
+		<if test='queryObj != null and  queryObj.buildAbstract != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.buildAbstract)'>
+		AND  BUILD_ABSTRACT = #{queryObj.buildAbstract}
+		</if>
+		<if test='queryObj != null and  queryObj.buildContent != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.buildContent)'>
+		AND  BUILD_CONTENT = #{queryObj.buildContent}
+		</if>
+		<if test='queryObj != null and  queryObj.fileType != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileType)'>
+		AND  FILE_TYPE = #{queryObj.fileType}
+		</if>
+		<if test='queryObj != null and  queryObj.fileUrl != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileUrl)'>
+		AND  FILE_URL = #{queryObj.fileUrl}
+		</if>
+		<if test='queryObj != null and  queryObj.dataState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.dataState)'>
+		AND  DATA_STATE = #{queryObj.dataState}
+		</if>
+		<if test='queryObj != null and  queryObj.shState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.shState)'>
+		AND  SH_STATE = #{queryObj.shState}
+		</if>
+		<if test='queryObj != null and  queryObj.notPassText != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.notPassText)'>
+		AND  NOT_PASS_TEXT = #{queryObj.notPassText}
+		</if>
+		<if test='queryObj != null and  queryObj.shUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.shUserId)'>
+		AND  SH_USER_ID = #{queryObj.shUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.shUserName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.shUserName)'>
+		AND  SH_USER_NAME = #{queryObj.shUserName}
+		</if>
+		<if test='queryObj != null and  queryObj.shTime != null'>
+			AND  SH_TIME = #{queryObj.shTime}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialBuildIntroductionQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_build_introduction 
+  		<include refid="where"/>
+	  <if test='materIdList != null and  materIdList.size() != 0'>
+		  AND MATERIAL_ID IN
+		  <foreach item="id" index="index" collection="materIdList" open="(" separator="," close=")">
+			  '${id}'
+		  </foreach>
+	  </if>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialBuildIntroductionQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_build_introduction 
+  		<include refid="where"/>
+  </select>
+
+	<select id="selectByMaterId" parameterType="string" resultMap="BaseResultViewMap">
+		select <include refid="Base_Column_List"/> from material_build_introduction
+		where  DATA_STATE='1' and MATERIAL_ID=#{materId} order by CREATE_TIME desc limit 1
+	</select>
+
+	<update id="updateBatchIds" parameterType="string">
+		update material_build_introduction set DATA_STATE='0'
+		where DATA_STATE='1'
+		and ID in
+		<foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+  
+</mapper>

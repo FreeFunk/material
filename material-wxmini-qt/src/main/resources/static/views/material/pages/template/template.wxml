@@ -1,0 +1,70 @@
+<template name="navBottom" data="selectNav">
+	<!-- 底部导航栏 -->
+	<view class="navBottomDiv bg-white">
+		<view bindtap="navBottomJump" data-whichbtn="1" class="navIcon_1">
+			<image wx:if="{{!selectNav.pitchOnMaterial}}" src="/images/icon/materialBase.png"></image>
+			<view wx:if="{{!selectNav.pitchOnMaterial}}" class="nav_bottom_text">材料库</view>
+			<image wx:if="{{selectNav.pitchOnMaterial}}" class="navIcon_1_select" src="/images/icon/materialBase_select.png"></image>
+			<view wx:if="{{selectNav.pitchOnMaterial}}" class="nav_bottom_text_select">材料库</view>
+		</view>
+		<view bindtap="navBottomJump" data-whichbtn="2" class="navIcon_2">
+			<image wx:if="{{!selectNav.pitchOnFind}}" src="/images/icon/find.png"></image>
+			<view wx:if="{{!selectNav.pitchOnFind}}" class="nav_bottom_text">案例</view>
+			<image wx:if="{{selectNav.pitchOnFind}}" class="navIcon_2_select" style="width:45rpx;height:45rpx;" src="/images/icon/find_select.png"></image>
+			<view wx:if="{{selectNav.pitchOnFind}}" class="nav_bottom_text_select">案例</view>
+		</view>
+		<view bindtap="navBottomJump" data-whichbtn="3" class="navIcon_3">
+			<image wx:if="{{!selectNav.pitchOnMine}}" src="/images/icon/mine.png"></image>
+			<view wx:if="{{!selectNav.pitchOnMine}}" class="nav_bottom_text">我的</view>
+			<image wx:if="{{selectNav.pitchOnMine}}" class="navIcon_3_select" src="/images/icon/mine_select.png"></image>
+			<view wx:if="{{selectNav.pitchOnMine}}" class="nav_bottom_text_select">我的</view>
+		</view>
+	</view>
+</template>
+
+<!-- 获取手机号的模板 -->
+<template name="getPhoneNum" data="getPhoneNumFlag">
+	<view wx:if="{{getPhoneNumFlag}}" class="customeDialog" >
+		<scroll-view scroll-y>
+			<view class="bg-white getPhoneDiv">
+				<view class="getPhone">获取手机号</view>
+				<view class="getPhoneDesc">申请获取您微信绑定的手机号</view>
+				<button open-type="getPhoneNumber" class="getPhoneDivButton" bindgetphonenumber="getPhoneNum">确 认</button>
+			</view>
+		</scroll-view>
+	</view>
+</template>
+<!-- 获取权限 -->
+<template name="getPermission" data="getPermissionFlag">
+	<view wx:if="{{getPermissionFlag}}" class="customeDialog" >
+		<scroll-view scroll-y>
+			<view style="width:610rpx;margin-left:76rpx;margin-top:127rpx;display:flex;flex-direction:column;padding-bottom:35rpx;" class="bg-white">
+				<image style="width:500rpx;height:450rpx;margin-left:55rpx;" src="/images/icon/permission.jpg"></image>
+				<view style="font-size:30rpx;text-align:center;color:#000000">非森新材申请获得以下权限</view>
+				<view style="text-align:center;color:#999999;font-size:27rpx;margin-top:20rpx;">获得您的公开信息（昵称、头像等）</view>
+				<button open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" class="getPhoneDivButton">我知道了</button>
+			</view>
+		</scroll-view>
+	</view>
+</template>
+<!-- 正在下载的弹窗模板 -->
+<template name="downloadIng" data="downloadIngFlag">
+	<view wx:if="{{downloadIngFlag}}" class="customeDialog" >
+		<scroll-view scroll-y>
+			<view class="bg-white getPhoneDiv" style="text-align:center">
+				<image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
+				正在下载...
+			</view>
+		</scroll-view>
+	</view>
+</template>
+<template name="loadPreviewFile" data="loadPreviewFileFlag">
+	<view wx:if="{{loadPreviewFileFlag}}" class="customeDialog" >
+		<scroll-view scroll-y>
+			<view class="bg-white getPhoneDiv" style="text-align:center">
+				<image src="https://image.weilanwl.com/gif/loading-white.gif" mode="aspectFit" class="gif-white response" style="height:240rpx"></image>
+				正在加载文件...
+			</view>
+		</scroll-view>
+	</view>
+</template>

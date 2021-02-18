@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="MaterialUserCollection-form" id="MaterialUserCollection-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">收藏分类</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" id="userId" name="queryObj.createUserId"/>
+                        <select name="queryObj.collectionCls">
+                            <option value="">请选择</option>
+                            <option value="CASE">案例</option>
+                            <option value="COLOR_MAP">色卡</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">收藏标题</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="queryObj.collectionTitle" placeholder="请输入收藏标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-comm layui-btn-sm" data-type="reload" lay-submit lay-filter="MaterialUserCollection-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="MaterialUserCollection-list" lay-filter="MaterialUserCollection-list"></table>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index:'lib/index',
+            common:'common',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index','table', 'form','common','viewer'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,common = layui.common
+                ,admin = layui.admin
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            //查询
+            form.on('submit(MaterialUserCollection-search)', function(data){
+                var field = data.field;
+
+                //执行重载
+                table.reload('MaterialUserCollection-list', {
+                    where: field,page:{curr:1}
+                });
+            });
+
+            /*
+            * 定义表格
+            * */
+            defineTable = function () {
+                var userId = $("#userId").val();
+                var headers = layui.admin.getTokenHeader();
+                table.render({
+                    elem: '#MaterialUserCollection-list' //指定原始表格的选择器（id选择器）
+                    ,url:layui.setter.basePath +'/material/materialUserCollection/listpage.jsn' //模拟接口
+                    ,headers:headers
+                    ,method: 'post'
+                    ,where:{"queryObj.createUserId":userId}
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.success, //解析接口状态
+                            "msg": res.errMsg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.list //解析数据列表
+                        };
+                    }
+                    ,response: {
+                        statusCode: true //规定成功的状态码，默认：0
+                    }
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id',align: 'center', width: 200, title: '主键',sort: true,hide:true}
+                    ,{field: 'createTime',align: 'center', width: '30%', title: '收藏时间',templet: function(d){
+                    return common.DateFormat(d.createTime,"yyyy-MM-dd HH:mm");},sort: true}
+            ,{field: 'collectionCls',align: 'center', width: '20%', title: '收藏分类',sort:false,templet:function(d){
+                if(d.collectionCls='CASE'){
+                    return "案例";
+                }else{
+                    return "色卡";
+                }
+                            }}
+            ,{field: 'collectionTitle',align: 'center', width: '20%', title: '收藏标题',sort: false}
+            ,{field: 'imageUrl',align: 'center', width: '20%', title: '封面图',sort: false,templet:function(d){
+                if(d.imageUrl!=null && d.imageUrl!=''){
+                    return "<img onclick='getImg(this)' src='"+layui.setter.ImgPath+d.imageUrl+"' style='width: 30px;height: 30px;'/>";
+                }else{
+                    return "无封面图";
+                }
+                            }}
+             //,{title: '操作', minWidth: 150, align: 'center', fixed: 'right', toolbar: '#table-MaterialUserCollection-list'}
+            ]]
+            ,autoSort: false
+                    ,page: true
+                    ,limit: 10
+                    ,limits: [10, 20, 30,40]
+                    ,text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+                //监听排序事件
+                table.on('sort(MaterialUserCollection-list)', function(obj){ //注：sort是工具条事件名，LAY-app-province-list是table原始容器的属性 lay-filter="对应的值"
+                    var sort = obj.field;
+                    //默认排序
+                    switch(obj.field){
+                        case 'id':
+                            sort ="ID";
+                            break;
+                        case 'createTime':
+                            sort ="CREATE_TIME";
+                            break;
+                        case 'createUserId':
+                            sort ="CREATE_USER_ID";
+                            break;
+                        case 'createUserName':
+                            sort ="CREATE_USER_NAME";
+                            break;
+                        case 'collectionCls':
+                            sort ="COLLECTION_CLS";
+                            break;
+                        case 'relationId':
+                            sort ="RELATION_ID";
+                            break;
+                        case 'collectionTitle':
+                            sort ="COLLECTION_TITLE";
+                            break;
+                        case 'imageUrl':
+                            sort ="IMAGE_URL";
+                            break;
+                    };
+                    if(obj.type==null){
+                        return;
+                    }
+                    //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                    table.reload('MaterialUserCollection-list', {
+                        initSort: obj//记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                        ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                            orderBy: sort+" "+obj.type //排序字段
+                        }
+                    });
+                });
+            }
+            defineTable();
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+        });
+
+</script>
+</body>
+</html>
+

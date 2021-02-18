@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialProducerSysUserRelation-form" id="MaterialProducerSysUserRelation-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="producerId"/>
+                <input type="text" name="userCode" lay-verify="required" placeholder="请输入账号信息" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密&nbsp;&nbsp;&nbsp;&nbsp;码</label>
+            <div class="layui-input-block">
+                <input type="password" id="password" name="password" lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-block">
+                <input type="password" id="confirmPwd" name="confirmPwd" lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialProducerSysUserRelation-form-submit" id="MaterialProducerSysUserRelation-form-submit" value="确认添加">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'form','laydate'], function(){
+            var $ = layui.$
+                ,laydate = layui.laydate
+                ,admin  = layui.admin
+                ,form = layui.form;
+
+            //监听提交
+            form.on('submit(MaterialProducerSysUserRelation-form-submit)', function(data){
+                var password = $("#password").val();
+                var confirmPwd = $("#confirmPwd").val();
+                if(password!=confirmPwd){
+                    layer.msg("两次输入的密码不一致");
+                    return false;
+                }
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                admin.req({
+                    url:layui.setter.basePath +'/zhyg/material/materialProducerSysUserRelation/insertProducerUserCode.jsn',
+                    data:field,
+                    method:"post",
+                    success:function (data) {
+                        if(data.success){
+                            parent.layui.table.reload('MaterialProducerSysUserRelation-list'); //重载表格
+                            parent.layer.close(index); //再执行关闭
+                            parent.layer.msg('添加成功', {
+                                icon: 1
+                            });
+                        }else{
+                            parent.layer.msg(data.errMsg, {
+                            });
+                        }
+
+                    },
+                });
+
+            });
+            laydate.render({
+                elem: '#createTime', //指定元素
+                type:'datetime'
+            });
+        })
+</script>
+</body>
+</html>

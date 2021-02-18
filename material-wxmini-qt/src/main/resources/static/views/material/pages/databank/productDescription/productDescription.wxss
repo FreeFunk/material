@@ -1,0 +1,138 @@
+/* 产品介绍 */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 左右两侧的宽度 */
+.list {
+    width: 368rpx;
+}
+
+/* 每个案例卡片 */
+.list-item {
+    margin-top: 6rpx;
+}
+
+/* 每个案例卡片的图片 */
+.list-item image {
+    border-radius: 5rpx
+}
+
+/* 案例卡片上的收藏 最外层 */
+.collect {
+    width: 39rpx;
+    height: 39rpx;
+    background-color: white;
+    border-radius: 4rpx;
+    position: absolute;
+    bottom: 15rpx;
+    right: 15rpx;
+}
+
+/* 案例卡片上的收藏 图标 */
+.collect image {
+    width: 26rpx;
+    height: 26rpx;
+    margin-top: 7rpx;
+    margin-left: 7rpx;
+}
+
+.tab {
+    float: left;
+    width: 50%;
+    height: 100%;
+    text-align: center;
+    padding: 26rpx 0;
+    font-size: 27rpx;
+}
+
+/* 切换的标题 样式*/
+.topTabSwiper {
+    background: #fff;
+    zoom: 1;
+    margin-top: 1rpx;
+    height: 78rpx;
+}
+
+/* 切换后的样式 */
+.topTabSwiper:after {
+    content: "";
+    clear: both;
+    display: block;
+}
+
+/* 切换后的底部边框 */
+.tabBorer {
+    border-bottom: 1px solid #000;
+    color: #333333;
+}
+
+/* 左右滑动的两个swiper */
+.swiper {
+    width: 100%;
+    margin-top: 10rpx;
+}
+
+/* 产品资料 -资料卡片的最外层 */
+.informationDiv {
+    height: 150rpx;
+    width: 728rpx;
+    border-radius: 4rpx;
+    margin-left: 11rpx;
+    margin-bottom: 17rpx;
+}
+
+/* 资料类型的图标 */
+.informationContent .icon {
+    width: 97rpx;
+    height: 97rpx;
+    border-radius: 4rpx;
+    margin-left: 27rpx;
+    margin-top: 29rpx;
+}
+
+/* 中间的文件标题+时间 最外层  */
+.informationContent {
+    display: flex;
+}
+
+/* 标题+时间 最外层 */
+.informationContent .title {
+    margin-left: 30rpx;
+    width: 450rpx;
+    margin-top: 45rpx;
+}
+
+/* 中间的 标题*/
+.informationContent .title .titleContent {
+    color: #333333;
+    font-size: 23rpx;
+}
+
+/* 中间的文字 时间 */
+.informationContent .title .titleTime {
+    color: #999999;
+    margin-top: 10rpx;
+    font-size: 20rpx;
+}
+
+/* 转发区域 最外层 */
+.informationContent .redirectDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 转发区域 图标 */
+.informationContent .redirectDiv image {
+    width: 23rpx;
+    height: 23rpx;
+}
+
+/* 转发区域 文字 */
+.informationContent .redirectDiv Text {
+    color: #333333;
+    font-size: 22rpx;
+    margin-left: 9rpx;
+    line-height: 22rpx;
+}

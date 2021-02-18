@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">材料名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="queryObj.materialName" placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="queryObj.caseName" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品类型</label>
+                    <div class="layui-input-inline">
+                        <select name="queryObj.type">
+                            <option value="">请选择产品类型</option>
+                            <option value="CASE">案例</option>
+                            <option value="COLOR_MAP">色卡</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-comm layui-btn-sm" data-type="reload" lay-submit lay-filter="MaterialCase-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="MaterialCase-list" lay-filter="MaterialCase-list"></table>
+            <script type="text/html" id="table-MaterialCase-list">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="imgList">图片列表</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pass">审核通过</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="fail">审核不通过</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index:'lib/index',
+            common:'common'
+        }).use(['index','table', 'form','common'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,common = layui.common
+                ,admin = layui.admin
+                ,form = layui.form;
+
+            //查询
+            form.on('submit(MaterialCase-search)', function(data){
+                var field = data.field;
+
+                //执行重载
+                table.reload('MaterialCase-list', {
+                    where: field,page:{curr:1}
+                });
+            });
+
+            /*
+            * 定义表格
+            * */
+            defineTable = function () {
+                var headers = layui.admin.getTokenHeader();
+                table.render({
+                    elem: '#MaterialCase-list' //指定原始表格的选择器（id选择器）
+                    ,url:layui.setter.basePath +'/material/materialCase/verifyListPage.jsn' //模拟接口
+                    ,headers:headers
+                    ,method: 'post'
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.success, //解析接口状态
+                            "msg": res.errMsg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.list //解析数据列表
+                        };
+                    }
+                    ,response: {
+                        statusCode: true //规定成功的状态码，默认：0
+                    }
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id',align: 'center', width: 200, title: '主键',sort: true,hide:true}
+                    ,{field: 'createTime',align: 'center', width: 120, title: '创建时间',templet: function(d){
+                    return common.DateFormat(d.createTime,"yyyy-MM-dd");},sort: true}
+            ,{field: 'createUserName',align: 'center', width: 120, title: '创建人员',sort: false}
+            ,{field: 'materialName',align: 'center', width: 120, title: '材料名称',sort: false}
+            ,{field: 'type',align: 'center', width: 100, title: '产品类型',sort: false,templet:function(d){
+                if(d.type == 'CASE'){
+                    return "案例";
+                }else{
+                    return "色卡";
+                }
+            }}
+            ,{field: 'caseClsName',align: 'center', width: 140, title: '分类名称',sort: false}
+            ,{field: 'caseName',align: 'center', width: 120, title: '案例名称',sort: false}
+            ,{field: 'caseCode',align: 'center', width: 120, title: '案例编码',sort: false}
+            ,{field: 'caseLabel',align: 'center', width: 140, title: '案例标签',sort: false}
+            ,{field: 'isTop',align: 'center', width: 100, title: '是否置顶',sort: false,templet:function(d){
+                if(d.isTop == '1'){
+                    return "置顶";
+                }else{
+                    return "正常";
+                }
+            }}
+            ,{field: 'isHide',align: 'center', width: 120, title: '发现页隐藏',sort: false,templet:function(d){
+                if(d.isHide=='1'){
+                    return "隐藏";
+                }else{
+                    return "正常";
+                }
+            }}
+            ,{field: 'isEnable',align: 'center', width: 100, title: '是否启用',sort: false,templet:function(d){
+                if(d.isEnable==''){
+                    return "已启用";
+                }else{
+                    return "未启用";
+                }
+             }}
+            ,{title: '操作', minWidth: 250, align: 'center', fixed: 'right', toolbar: '#table-MaterialCase-list'}
+            ]]
+            ,autoSort: false
+                    ,page: true
+                    ,limit: 10
+                    ,limits: [10, 20, 30,40]
+                    ,text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+                //为toolbar添加事件响应
+                table.on('tool(MaterialCase-list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    /*var data = obj.data;*///获得当前行数据
+                    //区分事件
+                    switch(obj.event){
+                        case 'pass':
+                            passVo(obj);
+                            break;
+                        case 'fail':
+                            failVo(obj);
+                            break;
+                        case 'imgList':
+                            imgListVo(obj);
+                            break;
+                    };
+                });
+
+                //监听排序事件
+                table.on('sort(MaterialCase-list)', function(obj){ //注：sort是工具条事件名，LAY-app-province-list是table原始容器的属性 lay-filter="对应的值"
+                    var sort = obj.field;
+                    //默认排序
+                    switch(obj.field){
+                        case 'id':
+                            sort ="ID";
+                            break;
+                        case 'createTime':
+                            sort ="CREATE_TIME";
+                            break;
+                        case 'createUserId':
+                            sort ="CREATE_USER_ID";
+                            break;
+                        case 'createUserName':
+                            sort ="CREATE_USER_NAME";
+                            break;
+                        case 'materialId':
+                            sort ="MATERIAL_ID";
+                            break;
+                        case 'materialName':
+                            sort ="MATERIAL_NAME";
+                            break;
+                        case 'type':
+                            sort ="TYPE";
+                            break;
+                        case 'caseClsId':
+                            sort ="CASE_CLS_ID";
+                            break;
+                        case 'caseClsName':
+                            sort ="CASE_CLS_NAME";
+                            break;
+                        case 'caseName':
+                            sort ="CASE_NAME";
+                            break;
+                        case 'caseCode':
+                            sort ="CASE_CODE";
+                            break;
+                        case 'caseLabel':
+                            sort ="CASE_LABEL";
+                            break;
+                        case 'caseMiniImg':
+                            sort ="CASE_MINI_IMG";
+                            break;
+                        case 'isTop':
+                            sort ="IS_TOP";
+                            break;
+                        case 'isHide':
+                            sort ="IS_HIDE";
+                            break;
+                        case 'orderNum':
+                            sort ="ORDER_NUM";
+                            break;
+                        case 'isEnable':
+                            sort ="IS_ENABLE";
+                            break;
+                        case 'shState':
+                            sort ="SH_STATE";
+                            break;
+                        case 'notPassText':
+                            sort ="NOT_PASS_TEXT";
+                            break;
+                        case 'shUserId':
+                            sort ="SH_USER_ID";
+                            break;
+                        case 'shUserName':
+                            sort ="SH_USER_NAME";
+                            break;
+                        case 'shTime':
+                            sort ="SH_TIME";
+                            break;
+                        case 'dataState':
+                            sort ="DATA_STATE";
+                            break;
+                    };
+                    if(obj.type==null){
+                        return;
+                    }
+                    //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                    table.reload('MaterialCase-list', {
+                        initSort: obj//记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                        ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                            orderBy: sort+" "+obj.type //排序字段
+                        }
+                    });
+                });
+            }
+            defineTable();
+
+            //审核通过
+            passVo = function (obj) {
+                layer.confirm('确定审核通过该条记录吗？', function(index){
+                    admin.req({
+                        url:layui.setter.basePath +'/material/materialCase/caseVerifyPass.jsn',
+                        data:{'id':obj.data.id},
+                        method:"post",
+                        success:function (data) {
+                            table.reload('MaterialCase-list',
+                                {page:
+                                        { curr: common.deleteJumpPage(obj) // 执行页面跳转方法
+                                        }
+                                }
+                            );
+                            layer.close(index);
+                            layer.msg('审核通过', {
+                                icon: 1
+                            });
+                        },
+                    });
+                });
+            }
+            //审核未通过
+            failVo = function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '审核不通过原因'
+                    ,content: '../verifyFailReason/VerifyFailReason.html'
+                    ,area: ['450px', '250px']
+                    ,btn: ['确定', '取消']
+                    ,success: function(layero, index){
+
+                    }
+                    ,yes: function(index, layero){
+                        layer.close(index);
+
+                        var othis = layero.find('iframe').contents().find("#VerifyFailReason-form").click();
+                        var failReason = othis.find('textarea[id="failReason"]').val();
+                        var id = obj.data.id;
+                        caseVarifyFail(id,failReason,obj);
+                    }
+                });
+            }
+            //审核失败
+            caseVarifyFail = function(id,failReason,obj){
+                var field = {"id":id,"failReason":failReason}
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialCase/caseVerifyFail.jsn",
+                    data:field,
+                    method:"post",
+                    success:function (data) {
+                        table.reload('MaterialCase-list',
+                            {page:
+                                    { curr: common.deleteJumpPage(obj) // 执行页面跳转方法
+                                    }
+                            }
+                        );
+                        if(data.success){
+                            layer.msg('操作成功', {
+                                icon: 1
+                            });
+                        }else{
+                            layer.msg('操作失败', {
+                                icon: 1
+                            });
+                        }
+                    }
+                })
+            }
+            //图片列表
+            imgListVo = function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '产品图片列表'
+                    ,content: 'MaterialCaseImageListShow.html'
+                    ,area: ['750px', '350px']
+                    ,btn: ['关闭']
+                    ,success: function(layero, index){
+                        //给iframe元素赋值
+                        var othis = layero.find('iframe').contents().find("#MaterialCaseImageList-form").click();
+                        othis.find('input[name="caseId"]').val(obj.data.id);
+                    }
+                    ,yes: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+        });
+
+</script>
+</body>
+</html>
+

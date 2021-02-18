@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+    <style>
+        .bodyDivCheck{
+            position: absolute;
+            top: 72%;
+            left: 38%;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialCase-form" id="MaterialCase-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属材料ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialId" lay-verify="required" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属材料名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialName" lay-verify="required" placeholder="请输入所属材料名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+        <div hidden class="layui-col-xs6 layui-col-sm6 layui-col-md6 layui-hide">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属材料ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialId" id="materialId" lay-verify="required" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">材料名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="materialName" lay-verify="required" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">分类ID</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseClsId" id="caseClsId" lay-verify="required" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseClsName" lay-verify="required" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label">案例名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseName" id="caseName" lay-verify="required" placeholder="请输入案例名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        &lt;!&ndash;<div class="layui-form-item">
+            <label class="layui-form-label">案例图编码</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseCode" lay-verify="required" placeholder="请输入案例图编码" autocomplete="off" class="layui-input">
+            </div>
+        </div>&ndash;&gt;
+        <div class="layui-form-item">
+            <label class="layui-form-label">案例标签</label>
+            <div class="layui-input-block">
+                <input type="text" name="caseLabel" lay-verify="required" placeholder="请输入案例标签" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号</label>
+            <div class="layui-input-block">
+                <input type="text" name="orderNum" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+            </div>
+        </div>-->
+        <!--<div class="layui-form-item">
+            <label class="layui-form-label">是否置顶</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="isTop"  lay-skin="switch" lay-text="是|否">
+            </div>
+
+        </div>
+
+        <div class="layui-form-item bodyDivCheck">
+            <label class="layui-form-label" style="width: 42%">是否在发现页隐藏</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="isHide"  lay-skin="switch" lay-text="是|否">
+            </div>
+        </div>-->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">缩略图</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="caseMiniImgUpload">上传图片</button>
+                    <div class="layui-upload-list">
+                        <label class="layui-form-label" style="position: absolute;font-size:13px;left: -73%;">封面图</label>
+                        <div class="layui-upload-list">
+                            <label class="layui-form-label" style="position: absolute;font-size:13px;left: -119%;">封面图</label>
+                            <div id="imgDiv">
+
+                            </div>
+                            <input type="hidden" id="caseMiniImg" name="caseMiniImg"  class="layui-input">
+                            <!--<p id="demoText"></p>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialCase-form-submit" id="MaterialCase-form-submit" value="确认添加">
+    </div>
+</div>
+
+<!--<script id="materialNameSelect" type="text/html">
+    <option value="">请选择材料</option>
+    {{#  layui.each(d.data, function(index, item){ }}
+    <option value="{{item.id}}">{{ item.materialName }}</option>
+    {{#  }); }}
+</script>
+<script id="caseClsNameSelect" type="text/html">
+    <option value="">请选择分类</option>
+    {{#  layui.each(d.data, function(index, item){ }}
+    <option value="{{item.id}}">{{ item.caseClsName }}</option>
+    {{#  }); }}
+</script>-->
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index',
+        viewer: 'layui_ext/viewer/viewer'
+    }).use(['index', 'form','laydate','laytpl','viewer','upload'], function(){
+        var $ = layui.$
+            ,laydate = layui.laydate
+            ,upload  = layui.upload
+            ,admin  = layui.admin
+            ,viewer = layui.viewer
+            ,laytpl = layui.laytpl
+            ,form = layui.form;
+
+        /* function selectMaterialClsList(){
+             admin.req({
+                 url:layui.setter.basePath + "/material/materialCaseCls/materialClsNameAll.jsn",
+                 data:{},
+                 method:'post',
+                 async:false,
+                 success:function(data){
+                     if(data.success){
+                         var getTpl = document.getElementById("caseClsNameSelect").innerHTML,
+                             view = document.getElementById("caseClsId");
+                         laytpl(getTpl).render(data,function(html){
+                             view.innerHTML = html;
+                             form.render();
+                         })
+                     }
+                 }
+             })
+         }
+         selectMaterialClsList();*/
+        function init() {
+            var materialId = $('#materialId').val();
+            var caseClsId =  $('#caseClsId').val();
+            admin.req({
+                url:layui.setter.basePath + "/material/materialCase/selectByCaseNum.jsn",
+                data:{
+                    'materialId':materialId,
+                    'caseClsId':caseClsId
+                },
+                method:'post',
+                async:false,
+                success:function(data){
+                    $('#caseName').val(data.data);
+                }
+            })
+        }
+        // init();
+        var loading;
+        var headers = layui.admin.getTokenHeader();
+        var imageUrlUpload = upload.render({
+            elem: '#caseMiniImgUpload'
+            ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn' //改成您自己的上传接口
+            ,headers:headers
+            ,multiple: true
+            ,accept:'images'
+            ,acceptMime:'image/*'
+            ,size:5120*10 //设置文件最大可允许上传的大小，单位 KB
+            ,before: function(obj){
+                loading = layer.load(2,{
+                    shade: [0.3, '#393D49'],
+                    time: 100*1000
+                });
+                //预读本地文件示例，不支持ie8
+                /*obj.preview(function(index, file, result){
+                    var html = $('#imgDiv').html();
+                    if(html==null || html.length==0){
+                        $('#imgDiv').html('<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">');
+                    }else {
+                        html = html +  '<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">';
+                        $('#imgDiv').html(html);
+                    }
+                });*/
+            }
+            ,done: function(res){
+                //如果上传失败
+                if(res.code > 0){
+                    return layer.msg('上传失败');
+                }
+                //上传成功
+                var url = res.data.split(layui.setter.imageTxt);
+                var html = $('#imgDiv').html();
+                if(html==null || html.length==0){
+                    $('#imgDiv').html('<img onclick="getImg(this)" src="'+layui.setter.ImgPath+url[1]+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">');
+                }else {
+                    html = html +  '<img onclick="getImg(this)" src="'+layui.setter.ImgPath+url[1]+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">';
+                    $('#imgDiv').html(html);
+                }
+                //上传成功
+                var caseMiniImg = $("#caseMiniImg").val();
+                if(caseMiniImg==''){
+                    $('#caseMiniImg').val(res.data);
+                }else {
+                    $('#caseMiniImg').val(caseMiniImg+','+res.data);
+                }
+                layer.close(loading);
+            }
+        });
+        //点击图片变大
+        getImg = function (value) {
+            $(value.parentElement.parentElement).viewer();
+        }
+
+        //监听提交
+        form.on('submit(MaterialCase-form-submit)', function(data){
+            var field = data.field; //获取提交的字段
+            var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+            field.type = 'COLOR_MAP';
+            field.isTop = '0';
+            field.isHide = '0';
+            //提交 Ajax 成功后，关闭当前弹层并重载表格
+            admin.req({
+                url:layui.setter.basePath +'/material/materialCase/insertAllNewProductColor.jsn',
+                data:field,
+                method:"post",
+                success:function (data) {
+                    if(data.success){
+                        parent.layui.table.reload('MaterialCase-list'); //重载表格
+                        parent.layer.close(index); //再执行关闭
+                        parent.layer.msg('添加成功', {
+                            icon: 1
+                        });
+                    }else{
+                        parent.layer.msg(data.errMsg, {
+                        });
+                    }
+
+                },
+            });
+
+        });
+        laydate.render({
+            elem: '#createTime', //指定元素
+            type:'datetime'
+        });
+        laydate.render({
+            elem: '#shTime', //指定元素
+            type:'datetime'
+        });
+    })
+</script>
+</body>
+</html>

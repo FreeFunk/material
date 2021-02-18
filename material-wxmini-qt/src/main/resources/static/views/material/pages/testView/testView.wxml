@@ -1,0 +1,169 @@
+<!--pages/testView/testView.wxml-->
+<!-- 资料库主页 -->
+<import src="/pages/template/template.wxml" />
+<!-- 搜索框 -->
+<view class="cu-bar bg-white search_border_bottom fixed">
+	<view class="search-form round">
+		<text class="cuIcon-search"></text>
+		<input type="text" placeholder="搜索材料" bindtap="searchForMaterial" confirm-type="search"></input>
+	</view>
+</view>
+<!-- 垂直导航 + （轮播图 + 卡片列表点击左侧导航栏右边进行响应的跳转功能>） -->
+<view class="VerticalBox" style="height:100%;">
+	<!-- 左侧的垂直导航 -->
+	<scroll-view class="VerticalNav nav bg-white" scroll-y scroll-with-animation scroll-top="{{VerticalNavTop}}">
+		<view class="cu-item" wx:key bindtap='tabSelect' data-id="{{index}}">
+			<view>
+				一级菜单1
+				<text class="lg text-gray {{clickPrimaryMenu?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+			</view>
+			<view>
+				<view>二级菜单</view>
+				<view>二级菜单</view>
+				<view>二级菜单</view>
+			</view>
+			<view>
+				一级菜单1
+				<text class="lg text-gray {{clickPrimaryMenu?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+			</view>
+			<view>
+				<view>二级菜单</view>
+				<view>二级菜单</view>
+				<view>二级菜单</view>
+			</view>
+
+
+			<!-- 防火饰面板 迪湛墙板 -->
+		</view>
+	</scroll-view>
+	<!-- 轮播图 + 卡片列表 -->
+	<view class="swiper_card_list" style="width:{{750-152}}rpx">
+		<!-- 轮播图 -->
+		<swiper indicator-color="white" class="padding-lr" circular="true" autoplay="true" interval="5000" duration="500">
+			<swiper-item wx:for="{{3}}" wx:key>
+				<image src="/images/swiper01.png" mode='widthFix'></image>
+			</swiper-item>
+		</swiper>
+		<!-- 卡片列表 -->
+		<scroll-view class="VerticalMain" scroll-y scroll-with-animation>
+			<!-- 产品报价 -->
+			<view class="padding-lr" bindtap="jumpToQuotine">
+				<!-- 标题 -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品报价</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content">
+					<image class="image_long" src="/images/placeholder_long.png"></image>
+				</view>
+			</view>
+			<!-- 精品案例 -->
+			<view class="padding-lr" bindtap="jumpToCase">
+				<!-- 标题 + ··· -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>精品案例</view>
+					<image class="image_more" src="/images/icon/more.png"></image>
+				</view>
+				<!-- 上面那层卡片和文字说明 -->
+				<view class="content_manyCard">
+					<!-- bindtap="jumpToCaseDetail" -->
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>最多6个字</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装客厅</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装别墅</view>
+					</view>
+				</view>
+				<!-- 下面那层卡片和文字说明 -->
+				<view class="content_manyCard">
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>民宿酒店</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装客厅</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装别墅</view>
+					</view>
+				</view>
+			</view>
+			<!-- 色卡贴图 -->
+			<view class="padding-lr" bindtap="jumpToColorCard">
+				<!-- 标题 + ··· -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>色卡贴图</view>
+					<image class="image_more" src="/images/icon/more.png"></image>
+				</view>
+				<!-- 上面那层卡片和文字说明 -->
+				<view class="content_manyCard">
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>FS-DZ006</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装客厅</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装别墅</view>
+					</view>
+				</view>
+				<!-- 下面那层卡片和文字说明 -->
+				<view class="content_manyCard">
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>FS-DZ006</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装客厅</view>
+					</view>
+					<view class="content_manyCard_content">
+						<image src="/images/placeholder_long.png"></image>
+						<view>家装别墅</view>
+					</view>
+				</view>
+			</view>
+			<!-- 产品介绍 -->
+			<view class="padding-lr" bindtap='jumpToProductionDescription'>
+				<!-- 标题 -->
+				<view class="title" bindtap="jumpToColorCard">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品介绍</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content" bindtap="selectShiGong">
+					<image class="image_long" src="/images/placeholder_long.png"></image>
+				</view>
+			</view>
+			<!-- 施工说明 -->
+			<view class="padding-lr" style="margin-bottom:20rpx;" bindtap='jumpToConstruction'>
+				<!-- 标题 -->
+				<view class="title" bindtap="jumpToColorCard">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>施工说明</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content" bingtap='tabSelect'>
+					<image class="image_long" src="/images/placeholder_long.png"></image>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+<template is="navBottom" data="{{selectNav}}" />
+<template is="getPhoneNum" data="{{getPhoneNumFlag}}" />
+<template is="getPermission" data="{{getPermissionFlag}}" />

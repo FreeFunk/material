@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">材料名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="queryObj.materialName" placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">材料标签</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="queryObj.materialLabel" placeholder="请输入材料标签" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-comm layui-btn-sm" data-type="reload" lay-submit lay-filter="Material-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-comm  layui-btn-sm" data-type="batchdel">删除</button>
+                <button class="layui-btn layuiadmin-btn-comm  layui-btn-sm" data-type="add">添加</button>
+            </div>
+            <table id="Material-list" lay-filter="Material-list"></table>
+            <script type="text/html" id="table-Material-list">
+<!--                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="materialMaintain">材料维护</a>-->
+                <!--<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="banner">轮播图</a>-->
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="price">产品报价</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="caseCls">案例分类</a>
+<!--                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="case">案例信息</a>-->
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="colorCls">色卡分类</a>
+<!--                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="color">色卡信息</a>-->
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="productStyle">产品样式</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="productIntroduction">产品介绍</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="buildIntroduction">施工说明</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+            </script>
+            <script type="text/html" id="isEnableId">
+                <input type="checkbox" lay-text="开|关" name="isEnableCheckBox" lay-skin="switch" lay-filter="switchTest" value="{{d.id}},{{d.isEnable}}" {{ d.isEnable == 1 ? 'checked' : '' }}>
+            </script>
+            <script type="text/html" id="isShowProductStyle">
+                <input type="checkbox" lay-text="开|关" name="isShowProductStyleCheckBox" lay-skin="switch" lay-filter="switchIsShowProductStyle" value="{{d.id}},{{d.isShowProductStyle}}" {{ d.isShowProductStyle == 1 ? 'checked' : '' }}>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index:'lib/index',
+            common:'common',
+            viewer: 'layui_ext/viewer/viewer',
+            $tool:'tool'
+        }).use(['index','table', 'form','common','viewer','$tool'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,common = layui.common
+                ,admin = layui.admin
+                ,$tool = layui.$tool
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            //查询
+            form.on('submit(Material-search)', function(data){
+                var field = data.field;
+
+                //执行重载
+                table.reload('Material-list', {
+                    where: field,page:{curr:1}
+                });
+            });
+
+            /*
+            * 定义表格
+            * */
+            defineTable = function () {
+                var headers = layui.admin.getTokenHeader();
+                table.render({
+                    elem: '#Material-list' //指定原始表格的选择器（id选择器）
+                    ,url:layui.setter.basePath +'/material/material/listpage.jsn' //模拟接口
+                    ,headers:headers
+                    ,method: 'post'
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.success, //解析接口状态
+                            "msg": res.errMsg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.list //解析数据列表
+                        };
+                    }
+                    ,response: {
+                        statusCode: true //规定成功的状态码，默认：0
+                    }
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id',align: 'center', width: 200, title: '主键',sort: true,hide:true}
+                    ,{field: 'createTime',align: 'center', width: 200, title: '创建时间',templet: function(d){
+                    return common.DateFormat(d.createTime,"yyyy-MM-dd");},sort: true,hide:true}
+            ,{field: 'createUserId',align: 'center', width: 200, title: '创建人ID',sort: true,hide:true}
+            ,{field: 'createUserName',align: 'center', width: 200, title: '创建人名',sort: true,hide:true}
+            ,{field: 'materialClsId',align: 'center', width: 200, title: '所属材料分类ID',sort: true,hide:true}
+            ,{field: 'materialClsName',align: 'center', width: 200, title: '所属材料分类名',sort: true,hide:true}
+            ,{field: 'materialName',align: 'center', width: '7%', title: '材料名称'}
+            ,{field: 'materialLabel',align: 'center', width: '7%', title: '材料标签'}
+            ,{field: 'productPriceImage',align: 'center', width: '8%', title: '产品报价图'
+                            ,templet: function(d){
+                                return "<img onclick=\"getImg(this)\" style=\"height: 30px;\" src="+layui.setter.ImgPath+d.productPriceImage+" >";}
+                        }
+            ,{field: 'productIntroductionImage',align: 'center', width: '8%', title: '产品介绍图'
+                            ,templet: function(d){
+                                return "<img onclick=\"getImg(this)\" style=\"height: 30px;\" src="+layui.setter.ImgPath+d.productIntroductionImage+" >";}
+                        }
+            ,{field: 'buildIntroductionImage',align: 'center', width: '8%', title: '施工说明图'
+                            ,templet: function(d){
+                                return "<img onclick=\"getImg(this)\" style=\"height: 30px;\" src="+layui.setter.ImgPath+d.buildIntroductionImage+" >";}
+                        }
+            ,{field: 'orderNum',align: 'center', width: '6%', title: '排序号',sort: true}
+            ,{field: 'isEnable',align: 'center', width: '7.5%', title: '是否启用',templet: '#isEnableId'}
+             ,{field: 'isShowProductStyle',align: 'center', width: '7.5%', title: '是否展示产品样式',templet: '#isShowProductStyle'}
+                        /*,{field: 'shState',align: 'center', width: '10%', title: '审核状态'
+                            ,templet: function(d) {
+                                            if (d.shState == '1') {
+                                                return '通过';
+                                            } else if (d.shState == '0') {
+                                                return '审核中';
+                                            } else {
+                                                return '未通过';
+                                            }
+                                        }
+                        }*/
+            ,{field: 'notPassText',align: 'center', width: 200, title: '未通过原因',sort: true,hide:true}
+            ,{field: 'shUserId',align: 'center', width: 200, title: '审核人ID',sort: true,hide:true}
+            ,{field: 'shUserName',align: 'center', width: 200, title: '审核人名',sort: true,hide:true}
+                    ,{field: 'shTime',align: 'center', width: 200, title: '审核时间',templet: function(d){
+                    return common.DateFormat(d.shTime,"yyyy-MM-dd");},sort: true,hide:true}
+            ,{field: 'dataState',align: 'center', width: 200, title: '数据状态',sort: true,hide:true}
+                    ,{title: '操作',  align: 'center', fixed: 'right', toolbar: '#table-Material-list'}
+            ]]
+            ,autoSort: false
+                    ,page: true
+                    ,limit: 10
+                    ,limits: [10, 20, 30,40]
+                    ,text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+                //为toolbar添加事件响应
+                table.on('tool(Material-list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    /*var data = obj.data;*///获得当前行数据
+                    //区分事件
+                    switch(obj.event){
+                        case 'del':
+                            deleteVo(obj);
+                            break;
+                        case 'edit':
+                            editVo(obj);
+                            break;
+                        case 'detail':
+                            detailVo(obj);
+                            break;
+                        case 'materialMaintain':
+                            materialMaintain(obj);
+                            break;
+                        case 'banner':
+                            banner(obj);
+                            break;
+                        case 'price':
+                            price(obj);
+                            break;
+                        case 'caseCls':
+                            caseCls(obj);
+                            break;
+                        case 'case':
+                            caseFun(obj);
+                            break;
+                        case 'colorCls':
+                            colorCls(obj);
+                            break;
+                        case 'color':
+                            color(obj);
+                            break;
+                        case 'productIntroduction':
+                            productIntroduction(obj);
+                            break;
+                        case 'buildIntroduction':
+                            buildIntroduction(obj);
+                            break;
+                        case 'productStyle':
+                            productStyle(obj);
+                            break;
+                    };
+                });
+
+                //监听排序事件
+                table.on('sort(Material-list)', function(obj){ //注：sort是工具条事件名，LAY-app-province-list是table原始容器的属性 lay-filter="对应的值"
+                    var sort = obj.field;
+                    //默认排序
+                    switch(obj.field){
+                        case 'id':
+                            sort ="ID";
+                            break;
+                        case 'createTime':
+                            sort ="CREATE_TIME";
+                            break;
+                        case 'createUserId':
+                            sort ="CREATE_USER_ID";
+                            break;
+                        case 'createUserName':
+                            sort ="CREATE_USER_NAME";
+                            break;
+                        case 'materialClsId':
+                            sort ="MATERIAL_CLS_ID";
+                            break;
+                        case 'materialClsName':
+                            sort ="MATERIAL_CLS_NAME";
+                            break;
+                        case 'materialName':
+                            sort ="MATERIAL_NAME";
+                            break;
+                        case 'materialLabel':
+                            sort ="MATERIAL_LABEL";
+                            break;
+                        case 'productPriceImage':
+                            sort ="PRODUCT_PRICE_IMAGE";
+                            break;
+                        case 'productIntroductionImage':
+                            sort ="PRODUCT_INTRODUCTION_IMAGE";
+                            break;
+                        case 'buildIntroductionImage':
+                            sort ="BUILD_INTRODUCTION_IMAGE";
+                            break;
+                        case 'orderNum':
+                            sort ="ORDER_NUM";
+                            break;
+                        case 'isEnable':
+                            sort ="IS_ENABLE";
+                            break;
+                        case 'shState':
+                            sort ="SH_STATE";
+                            break;
+                        case 'notPassText':
+                            sort ="NOT_PASS_TEXT";
+                            break;
+                        case 'shUserId':
+                            sort ="SH_USER_ID";
+                            break;
+                        case 'shUserName':
+                            sort ="SH_USER_NAME";
+                            break;
+                        case 'shTime':
+                            sort ="SH_TIME";
+                            break;
+                        case 'dataState':
+                            sort ="DATA_STATE";
+                            break;
+                    };
+                    if(obj.type==null){
+                        return;
+                    }
+                    //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                    table.reload('Material-list', {
+                        initSort: obj//记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                        ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                            orderBy: sort+" "+obj.type //排序字段
+                        }
+                    });
+                });
+            }
+            defineTable();
+
+            //监听指定开关
+            form.on('switch(switchTest)', function(data){
+                var list = data.value.split(",");
+                if(list[1]=='1'){//当前要操作是进行取消
+                    list[1] = '0'
+                }else {//当前要操作是进行启用
+                    list[1] = '1'
+                }
+                admin.req({
+                    url:layui.setter.basePath +'/material/material/switchEnableState.jsn',
+                    method:"post",
+                    async:false,
+                    data:{
+                        'id': list[0],
+                        'isEnable':list[1]
+                    },
+                    success:function (data) {
+                        if(list[1]=='1'){//启用成功
+                            parent.layer.msg('启用成功', {
+                                icon: 1
+                            });
+                        }else {
+                            parent.layer.msg('禁用成功', {
+                                icon: 1
+                            });
+                        }
+                        table.reload('Material-list');
+                    }
+                });
+            });
+
+
+            //监听指定开关
+            form.on('switch(switchIsShowProductStyle)', function(data){
+                debugger
+                var list = data.value.split(",");
+                if(list[1]=='1'){//当前要操作是进行取消
+                    list[1] = '0'
+                }else {//当前要操作是进行启用
+                    list[1] = '1'
+                }
+                admin.req({
+                    url:layui.setter.basePath +'/material/material/switchIsShowProductStyleState.jsn',
+                    method:"post",
+                    async:false,
+                    data:{
+                        'id': list[0],
+                        'isShowProductStyle':list[1]
+                    },
+                    success:function (data) {
+                        if(list[1]=='1'){//启用成功
+                            parent.layer.msg('启用成功', {
+                                icon: 1
+                            });
+                        }else {
+                            parent.layer.msg('禁用成功', {
+                                icon: 1
+                            });
+                        }
+                        table.reload('Material-list');
+                    }
+                });
+            });
+            //轮播图
+            banner = function(obj){
+                $tool.JumpPage('../materialbannerInmater/MaterialBannerList.html', obj.data);
+            }
+
+            //报价文件
+            price = function(obj){
+                $tool.JumpPage('../materialproductpriceInmater/MaterialProductPriceList.html', obj.data);
+            }
+
+            //案例分类
+            caseCls = function(obj){
+                $tool.JumpPage('../materialcaseclsInmater/MaterialCaseClsList.html', obj.data);
+            }
+            //案例信息
+            caseFun = function(obj){
+                $tool.JumpPage('../materialcaseInmater/MaterialCaseList.html', obj.data);
+            }
+            //色卡分类
+            colorCls = function(obj){
+                $tool.JumpPage('../matercasecolorclsInmater/MaterialCaseClsList.html', obj.data);
+            }
+            //色卡信息
+            color = function(obj){
+                $tool.JumpPage('../matercasecolorInmater/MaterialCaseList.html', obj.data);
+            }
+            //产品介绍
+            productIntroduction = function(obj){
+                $tool.JumpPage('../materialproductintroductionInmater/MaterialProductIntroductionList.html', obj.data);
+            }
+            //施工说明
+            buildIntroduction = function(obj){
+                $tool.JumpPage('../materialbuildintroductionInmater/MaterialBuildIntroductionInfo.html', obj.data);
+            }
+
+            //产品样式
+            productStyle = function(obj){
+                $tool.JumpPage('../materialproductstyleInmater/MaterialProductStyleList.html', obj.data);
+            }
+
+            /**
+             * 材料维护
+             * 一级轮播图 MaterialBannerAdd.html
+             * 二级产品报价 MaterialProductPriceAdd.html
+             *          -->是否添加报价文件  MaterialProductPriceFileUpload.html
+             * 三级案例分类  MaterialCaseClsAdd.html
+             *          -->案例展示信息 MaterialCaseAdd.html
+             *              --->案例图 MaterialCaseImageAdd.html
+             * 四级色卡分类 MaterialCaseClsAddColor.html
+             *          -->色卡展示信息 MaterialCaseAddColor.html
+             *              --->色卡图 MaterialCaseImageAdd.html
+             * 五级产品介绍 MaterialProductIntroductionAdd.html
+             * 六级施工说明 MaterialBuildIntroductionAdd.html
+             * @param obj
+             */
+            materialMaintain = function(obj){
+                var materialName = obj.data.materialName;
+                var materialId = obj.data.id;
+                layer.open({
+                    type: 2
+                    ,title: materialName+'轮播图维护'
+                    ,content: 'MaterialBannerAdd.html'
+                    ,maxmin: true
+                    ,area: ['600px', '450px']
+                    ,btn: ['下一步', '关闭']
+                    ,success: function(layero, index){
+                        var othis = layero.find('iframe').contents().find("#MaterialBanner-form").click();
+
+                        othis.find('input[name="materialId"]').val(materialId);
+                        othis.find('input[name="materialName"]').val(materialName);
+                    }
+                    ,yes: function(index, layero){
+                        var submit = layero.find('iframe').contents().find("#MaterialBanner-form-submit");
+                        submit.trigger('click');
+                    }
+                })
+            }
+
+            //删除
+            deleteVo = function (obj) {
+                layer.confirm('确定删除此记录吗？', function(index){
+                    admin.req({
+                        url:layui.setter.basePath +'/material/material/deleteByIds.jsn',
+                        data:{'ids':obj.data.id},
+                        method:"post",
+                        success:function (data) {
+                            table.reload('Material-list',
+                                {page:
+                                    { curr: common.deleteJumpPage(obj) // 执行页面跳转方法
+                                    }
+                                }
+                            );
+                            layer.close(index);
+                            layer.msg('删除成功', {
+                                icon: 1
+                            });
+                        },
+                    });
+                });
+            }
+            //编辑
+            editVo = function (obj) {
+                layer.open({
+                    type: 2
+                    ,title: '编辑'
+                    ,content: 'MaterialEdit.html'
+                    ,maxmin: true
+                    ,area: ['672px', '500px']
+                    ,btn: ['确定', '取消']
+                    ,success: function(layero, index){
+                        var s = layero.find('iframe');
+                        $("id",s[0].contentWindow.document).val(obj.data.id);
+                        //给iframe元素赋值
+                        var othis = layero.find('iframe').contents().find("#Material-form").click();
+
+                        othis.find('input[name="id"]').val(obj.data.id);
+                        othis.find('input[name="createTime"]').val(obj.data.createTime);
+                        othis.find('input[name="createUserId"]').val(obj.data.createUserId);
+                        othis.find('input[name="createUserName"]').val(obj.data.createUserName);
+                        othis.find('input[name="materialClsId"]').val(obj.data.materialClsId);
+                        othis.find('input[name="materialClsName"]').val(obj.data.materialClsName);
+                        othis.find('input[name="materialName"]').val(obj.data.materialName);
+                        othis.find('input[name="materialLabel"]').val(obj.data.materialLabel);
+                        othis.find('img[id="priceImageShow"]').attr('src', layui.setter.ImgPath+obj.data.productPriceImage);
+                        othis.find('img[id="introductionImageShow"]').attr('src', layui.setter.ImgPath+obj.data.productIntroductionImage);
+                        othis.find('img[id="buildIntroductionImageShow"]').attr('src', layui.setter.ImgPath+obj.data.buildIntroductionImage);
+                        othis.find('input[name="orderNum"]').val(obj.data.orderNum);
+                        othis.find('input[name="isEnable"]').val(obj.data.isEnable);
+                        othis.find('input[name="shState"]').val(obj.data.shState);
+                        othis.find('input[name="notPassText"]').val(obj.data.notPassText);
+                        othis.find('input[name="shUserId"]').val(obj.data.shUserId);
+                        othis.find('input[name="shUserName"]').val(obj.data.shUserName);
+                        othis.find('input[name="shTime"]').val(obj.data.shTime);
+                        othis.find('input[name="dataState"]').val(obj.data.dataState);
+                    }
+                    ,yes: function(index, layero){
+                        var submit = layero.find('iframe').contents().find("#Material-form-edit");
+                        submit.trigger('click');
+                    }
+                });
+            }
+            //详情
+            detailVo = function(obj){
+                layer.open({
+                    type: 2
+                    ,title: '查看详情'
+                    ,content: 'MaterialDetail.html'
+                    ,area: ['1000px', '560px']
+                    ,btn: ['提交审核', '取消']
+                    ,success: function(layero, index){
+                        var s = layero.find('iframe');
+                        $("id",s[0].contentWindow.document).val(obj.data.id);
+                        //给iframe元素赋值
+                        var othis = layero.find('iframe').contents().find("#MaterialDetail-form").click();
+                        othis.find('input[name="materialClsId"]').val(obj.data.materialClsId);
+                        othis.find('input[name="materialClsName"]').val(obj.data.materialClsName);
+                        othis.find('input[id="materialName"]').val(obj.data.materialName);
+                        othis.find('input[id="materialName"]').val(obj.data.materialName);
+                        othis.find('input[id="materialLabel"]').val(obj.data.materialLabel);
+                        othis.find('img[id="priceImageShow"]').attr('src', obj.data.productPriceImage);
+                        othis.find('img[id="introductionImageShow"]').attr('src', obj.data.productIntroductionImage);
+                        othis.find('img[id="buildIntroductionImageShow"]').attr('src', obj.data.buildIntroductionImage);
+                        othis.find('input[name="productPriceImage"]').val(obj.data.productPriceImage);
+                        othis.find('input[name="productIntroductionImage"]').val(obj.data.productIntroductionImage);
+                        othis.find('input[name="buildIntroductionImage"]').val(obj.data.buildIntroductionImage);
+                        if(obj.data.isEnable=='1'){
+                            othis.find('input[id="isEnable"]').val("已启用");
+                        }else{
+                            othis.find('input[id="isEnable"]').val("未启用");
+                        }
+                    }
+                    ,yes: function(index, layero){
+                        var submit = layero.find('iframe').contents().find("#Material-form-edit");
+                        submit.trigger('click');
+                    }
+                });
+            }
+
+            //点击事件
+            var active = {
+                //批量删除
+                batchdel: function(){
+                    var checkStatus = table.checkStatus('Material-list')
+                        ,checkData = checkStatus.data; //得到选中的数据
+
+                    if(checkData.length === 0){
+                        return layer.msg('请选择数据');
+                    }
+
+                    layer.confirm('确定删除吗？', function(index) {
+                        var ids = "" ;
+                        for(var i = 0;i<checkData.length;i++){
+                            if(ids==""){
+                                ids= checkData[i].id;
+                            }else {
+                                ids = ids+","+checkData[i].id;
+                            }
+                        }
+                        admin.req({
+                            url:layui.setter.basePath +'/material/material/deleteByIds.jsn',
+                            data:{'ids':ids},
+                            method:"post",
+                            success:function (data) {
+                                table.reload('Material-list',
+                                    {page:
+                                        { curr: common.deleteDulJumpPage(checkStatus) // 执行页面跳转方法
+                                        }
+                                    }
+                                );
+                                layer.msg('删除成功', {
+                                    icon: 1
+                                });
+                            },
+                        });
+                    });
+                }
+                //添加
+                ,add: function(){
+                    layer.open({
+                        type: 2
+                        ,title: '添加'
+                        ,content: 'MaterialAdd.html'
+                        ,maxmin: true
+                        ,area: ['672px', '500px']
+                        ,btn: ['确定', '取消']
+                        ,success:function(layero,index){
+                        }
+                        ,yes: function(index, layero){
+                            //点击确认触发 iframe 内容中的按钮提交
+                            var submit = layero.find('iframe').contents().find("#Material-form-submit");
+                            submit.click();
+                        }
+                    });
+                }
+            }
+            //绑定点击事件
+            $('.layui-btn.layuiadmin-btn-comm.layui-btn-sm').on('click', function(){
+                var type = $(this).data('type');
+                active[type] ? active[type].call(this) : '';
+            });
+
+
+        });
+
+</script>
+</body>
+</html>
+

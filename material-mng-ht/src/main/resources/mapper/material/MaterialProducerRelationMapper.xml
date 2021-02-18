@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialProducerRelationMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialProducerRelation" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="PRODUCER_ID" property="producerId"/>
+			<result column="MATERIAL_ID" property="materialId"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialProducerRelationView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, PRODUCER_ID, MATERIAL_ID
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.producerId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.producerId)'>
+		AND  PRODUCER_ID = #{queryObj.producerId}
+		</if>
+		<if test='queryObj != null and  queryObj.materialId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.materialId)'>
+		AND  MATERIAL_ID = #{queryObj.materialId}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialProducerRelationQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_producer_relation 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialProducerRelationQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_producer_relation 
+  		<include refid="where"/>
+  </select>
+
+	<select id="selectByProducerId" parameterType="string" resultType="string">
+		select MATERIAL_ID from material_producer_relation
+		where PRODUCER_ID=#{producerId}
+	</select>
+
+	<select id="countByMatAndPro" parameterType="map" resultType="int">
+		select count(1) from material_producer_relation
+		where PRODUCER_ID=#{producerId}
+		and MATERIAL_ID=#{materialId}
+	</select>
+
+	<delete id="deleteByMatAndPro" parameterType="map">
+		delete from material_producer_relation
+		where PRODUCER_ID=#{producerId}
+		and MATERIAL_ID=#{materialId}
+	</delete>
+  
+</mapper>

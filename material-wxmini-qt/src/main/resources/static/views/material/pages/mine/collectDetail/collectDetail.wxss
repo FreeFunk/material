@@ -1,0 +1,103 @@
+/* 案例详情 样式 */
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+page {
+    background-color: white;
+}
+
+/* 上面的图片 外层框 */
+.imageDiv {
+    min-height: 900rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-bottom: 1px solid #f6f6f6;
+}
+
+/* 上面的图片 图片 */
+.imageDiv image {
+    width: 100%;
+}
+
+/* 上面的图片 底部的编码文字 */
+.guige {
+    width: 100%;
+    border-bottom: 1px solid #f6f6f6;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: right;
+    padding-right: 30rpx;
+    color: #8c8c8c;
+    font-size: 27rpx;
+}
+
+/* 收藏 + 下载 的外层框 */
+.collecDownLoadDiv {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    margin-top: 31rpx;
+    right: 30rpx;
+}
+
+/* 收藏 外层框*/
+.collect {
+    width: 100rpx;
+    height: 50rpx;
+    margin-right: 31rpx;
+    line-height: 50rpx;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 收藏 图标*/
+.collect image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+/* 收藏 文字*/
+.collect text {
+    padding-left: 7rpx;
+    font-size: 25rpx;
+    color: #000000;
+}
+
+.download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 下载 图标*/
+.download image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+/* 下载 文字*/
+.download text {
+    padding-left: 6rpx;
+    font-size: 25rpx;
+    color: #000000;
+}
+
+.mingcheng {
+    color: #615f5f;
+    font-size: 30rpx;
+    text-align: center;
+    margin-top: 24rpx;
+}
+
+.jieshao {
+    color: #8c8c8c;
+    font-size: 27rpx;
+    line-height: 48rpx;
+    text-indent: 50rpx;
+    padding-bottom: 20rpx;
+    margin: 10rpx 16rpx 0 17rpx
+}

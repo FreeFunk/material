@@ -1,0 +1,63 @@
+<!-- 顶部的标签栏目 -->
+<import src="/pages/template/template.wxml" />
+<view class="con">
+	<view class="top">
+		<view class="headerTags">
+			<scroll-view scroll-x="true" scroll-left="{{scrollX}}" scroll-with-animation="true" style="white-space:nowrap;overflow:hidden;padding-right:140rpx;">
+				<!-- 循环标签用 -->
+				<block wx:for="{{titleTags}}" wx:key="index">
+					<view bindtap="clickTitleTags" data-type="show" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'tagSelected':'tag'}}">{{item.caseClsName}}</view>
+				</block>
+			</scroll-view>
+			<view bindtap="openAllTags" class="allTagsBtn">
+				全部 <text class="lg text-gray {{openAllTagsFlag?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+			</view>
+
+		</view>
+	</view>
+	<!-- 展开的内容 -->
+	<view wx:if="{{openAllTagsFlag}}" class="bg-white allHideTags">
+		<block wx:for="{{titleTags}}" wx:key="index">
+			<view bindtap="clickTitleTags" data-type="hide" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'hideTags_selected':'hideTags'}}">{{item.caseClsName}}</view>
+		</block>
+	</view>
+	<!-- 中间内容 -->
+	<view class="scroll" wx:if="{{!thisTagNoDataFlag}}">
+		<scroll-view scroll-y style="height:100%;" bindscrolltolower="nextPage" scroll-into-view="{{toView}}">
+			<view style="display:flex;">
+				<!-- 单个卡片 -->
+				<view style="width:368rpx;margin-left:4rpx;">
+					<view class="colorCardDiv" wx:for="{{leftList}}" wx:key="index">
+						<!-- 收藏框 -->
+						<image bindtap="jumpToColorCardDetail" data-item="{{item}}" style="border-radius:5rpx" src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+						<view class="colorCardCollect" bindtap="collectSuccess" data-item="{{item}}">
+							<image wx:if="{{item.isCollection==0}}" src="/images/icon/collect.png"></image>
+							<image wx:if="{{item.isCollection==1}}" src="/images/icon/collected.png"></image>
+						</view>
+					</view>
+				</view>
+				<view style="height:100%;width:6rpx;"></view>
+				<view style="width:368rpx;margin-right:4rpx;">
+					<view class="colorCardDiv" wx:for="{{rightList}}" wx:key="index">
+						<!-- 收藏框 -->
+						<image bindtap="jumpToColorCardDetail" data-item="{{item}}" style="border-radius:5rpx" src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+						<view class="colorCardCollect" bindtap="collectSuccess" data-item="{{item}}">
+							<image wx:if="{{item.isCollection==0}}" src="/images/icon/collect.png"></image>
+							<image wx:if="{{item.isCollection==1}}" src="/images/icon/collected.png"></image>
+						</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+	<view class="bg-white" wx:if="{{thisTagNoDataFlag}}" style="text-align:center;height: {{ktxWindowHeight-98}}rpx;">
+		<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+		暂无数据
+	</view>
+</view>
+<view wx:if="{{noDataNowFlag}}" style="padding-bottom:98rpx;height:{{ktxWindowHeight}}rpx;text-align:center" class="bg-white">
+	<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+	暂无数据
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

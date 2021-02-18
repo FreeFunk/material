@@ -1,0 +1,71 @@
+/* 报价 */
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 中间卡片列表的内容 */
+.scrollDiv {
+    position: absolute;
+    top: 80rpx;
+}
+
+/* 文件的div */
+.fileDiv {
+    margin-top: 13rpx;
+    background-color: white;
+    width: 750rpx;
+    height: 124rpx;
+    position: relative;
+}
+
+.fileDiv .fileContent {
+    display: flex;
+    position: absolute;
+    top: 31rpx;
+    left: 18rpx;
+}
+
+/* 文件链接的图片 */
+.fileDiv .fileContent image {
+    width: 66rpx;
+    height: 66rpx;
+    border-radius: 13rpx;
+}
+
+/* 文字内容部分 */
+.fileDiv .fileContent .textDiv {
+    margin-left: 23rpx;
+    width: 494rpx;
+}
+
+/* 文字内容部分 标题 */
+.fileDiv .fileContent .textDiv .title {
+    color: #403f3f;
+    font-size: 23rpx;
+}
+
+/* 文字内容部分 上传时间 */
+.fileDiv .fileContent .textDiv .uploadTime {
+    color: #c8c8c8;
+    margin-top: 10rpx;
+    font-size: 17rpx;
+}
+
+/* 转发部分 */
+
+.fileContent .redirect {
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+/* 转发的图标 */
+.fileContent .redirect image {
+    width: 22rpx;
+    height: 22rpx;
+}
+
+/* 转发的文字 */
+.fileContent .redirect text {
+    color: #403f3f;
+    font-size: 22rpx;
+}

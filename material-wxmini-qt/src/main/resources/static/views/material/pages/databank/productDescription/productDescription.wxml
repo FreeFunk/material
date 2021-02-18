@@ -1,0 +1,122 @@
+<!--产品介绍-->
+<import src="/pages/template/template.wxml" /><!-- 中间内容框 -->
+<view style="padding-bottom:98rpx;">
+	<!-- 顶部的现在处于哪个选项卡 -->
+	<view class='topTabSwiper'>
+		<view class='tab  {{currentPageNum == 0 ? "tabBorer" : ""}}' data-current="0" bindtap='checkCurrent'>介绍图片</view>
+		<view class='tab  {{currentPageNum == 1 ? "tabBorer" : ""}}' data-current="1" bindtap='checkCurrent'>产品资料</view>
+	</view>
+	<!-- 中间的内容 -->
+	<swiper current="{{currentPageNum}}" class='swiper' duration="300" bindchange="bindchange" style="height:{{ktxWindowHeight-80-20-98}}rpx">
+		<!-- 第一个选项卡。介绍图片 -->
+		<swiper-item>
+			<scroll-view scroll-y="true" style="height:100%;width:750rpx;" bindscrolltolower="nextPage">
+				<!-- 将卡片分成两列 -->
+				<view wx:if="{{!noDataNowFlag_image}}" style="display: flex;">
+					<!-- 瀑布流实现; -->
+					<!-- 第一列 -->
+							<!-- <view class="list-item" wx:for="{{productImgList}}" wx:if="{{index%2==0}}" wx:key="index">
+							<view style="position:relative"> -->
+								<image style="width:742rpx;margin-left: 4rpx;"  bindtap="previewImg" data-imageurl="{{productImgList[0].fileUrl}}" src="{{imageHost + productImgList[0].fileUrl}}" mode="widthFix"></image>
+					<!-- 	</view>
+					</view> -->
+					<!-- <view style="width:6rpx;height:100%;"></view> -->
+					<!-- 第二列卡片 -->
+					<!-- <view class="list" style="marign-right:4rpx;">
+						<view class="list-item" wx:for="{{productImgList}}" wx:if="{{index%2==1}}" wx:key="index">
+							<view class="item-content radius" style="position:relative">
+								<image bindtap="previewImg" data-imageurl="{{item.fileUrl}}"  src="{{imageHost + item.fileUrl}}" mode="widthFix"></image>
+							</view>
+						</view>
+					</view> -->
+				</view>
+				<view wx:if="{{noDataNowFlag_image}}" class="bg-white" style="text-align:center;height:99%">
+					<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+					暂无数据
+				</view>
+			</scroll-view>
+		</swiper-item>
+		<!-- 第二个选项卡。产品资料 -->
+		<swiper-item>
+			<view wx:if="{{!noDataNowFlag_file}}" scroll-y="true" style="height:100%;">
+				<block wx:for="{{productFileList}}" wx:key="index">
+					<!-- 单个的资料 xlsx -->
+					<view wx:if="{{item.fileType=='xlsx'||item.fileType=='xls'}}" class="bg-white informationDiv">
+						<view class="informationContent">
+							<!-- ppt图标 -->
+							<image bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" src="/images/icon/icon_xsl.png" class="icon"></image>
+							<!-- 中间的内容 -->
+							<view class="title" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+								<view class="titleContent">{{item.fileName}}</view>
+								<view class="titleTime">上传时间: {{item.createTime}}</view>
+							</view>
+							<!-- 转发区域 -->
+							<view class="redirectDiv" bindtap='copyText' data-text="{{item.fileUrl}}">
+								<image src="/images/icon/redirect.png"></image>
+								<text>转发</text>
+							</view>
+						</view>
+					</view>
+					<!-- 单个的资料 ppt -->
+					<view wx:if="{{item.fileType=='ppt'}}" class="bg-white informationDiv">
+						<view class="informationContent">
+							<!-- ppt图标 -->
+							<image bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" src="/images/icon/icon_ppt.png" class="icon"></image>
+							<!-- 中间的内容 -->
+							<view class="title" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+								<view class="titleContent">{{item.fileName}}</view>
+								<view class="titleTime">上传时间: {{item.createTime}}</view>
+							</view>
+							<!-- 转发区域 -->
+							<view class="redirectDiv" bindtap='copyText' data-text="{{item.fileUrl}}">
+								<image src="/images/icon/redirect.png"></image>
+								<text>转发</text>
+							</view>
+						</view>
+					</view>
+					<!-- 单个的资料 word -->
+					<view wx:if="{{item.fileType=='doc' || item.fileType=='docx'}}" class="bg-white informationDiv">
+						<view class="informationContent">
+							<!-- ppt/word/pdf图标 -->
+							<image bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" src="/images/icon/icon_word.png" class="icon"></image>
+							<!-- 中间的内容 -->
+							<view class="title" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+								<view class="titleContent">{{item.fileName}}</view>
+								<view class="titleTime">上传时间: {{item.createTime}}</view>
+							</view>
+							<!-- 转发区域 -->
+							<view class="redirectDiv" bindtap='copyText' data-text="{{item.fileUrl}}">
+								<image src="/images/icon/redirect.png"></image>
+								<text>转发</text>
+							</view>
+						</view>
+					</view>
+					<!-- 单个的资料 pdf -->
+					<view wx:if="{{item.fileType=='pdf'}}" class="bg-white informationDiv">
+						<view class="informationContent">
+							<!-- ppt/word/pdf图标 -->
+							<image bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" src="/images/icon/icon_pdf.png" class="icon"></image>
+							<!-- 中间的内容 -->
+							<view class="title" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+								<view class="titleContent">{{item.fileName}}</view>
+								<view class="titleTime">上传时间: {{item.createTime}}</view>
+							</view>
+							<!-- 转发区域 -->
+							<view class="redirectDiv" bindtap='copyText' data-text="{{item.fileUrl}}">
+								<image src="/images/icon/redirect.png"></image>
+								<text>转发</text>
+							</view>
+						</view>
+					</view>
+				</block>
+			</view>
+			<view wx:if="{{noDataNowFlag_file}}" class="bg-white" style="text-align:center;height:99%">
+				<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+				暂无数据
+			</view>
+		</swiper-item>
+	</swiper>
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />
+<template is="loadPreviewFile" data="{{loadPreviewFileFlag}}" />

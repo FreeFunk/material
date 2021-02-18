@@ -1,0 +1,60 @@
+/* 精品案例 */
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 左右两侧的宽度 */
+.list {
+  width: 368rpx;
+}
+
+
+/* 每个案例卡片 */
+.list-item {
+  margin-top: 6rpx;
+}
+
+/* 每个案例卡片的图片 */
+.list-item image {
+  border-radius: 5rpx
+}
+
+/* 案例卡片上的收藏 最外层 */
+.collect {
+  width: 39rpx;
+  height: 39rpx;
+  background-color: white;
+  border-radius: 4rpx;
+  position: absolute;
+  bottom: 15rpx;
+  right: 15rpx;
+}
+
+/* 案例卡片上的收藏 图标 */
+.collect image {
+  width: 26rpx;
+  height: 26rpx;
+  margin-top: 7rpx;
+  margin-left: 7rpx;
+}
+
+/* 中间卡片列表的内容 */
+.scrollDiv {
+  position: absolute;
+  top: 80rpx;
+}
+page {
+  height: 100%;
+}
+.con {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.top {
+  padding-top: 90rpx;
+}
+.scroll {
+  flex: 1;
+  overflow: scroll;
+  padding-bottom: 100rpx;
+}

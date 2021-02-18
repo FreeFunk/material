@@ -1,0 +1,128 @@
+/*  底部导航栏 */
+
+/*底部导航栏  最外层框子 */
+.navBottomDiv {
+    width: 100vh;
+    height: 97rpx;
+    border-top: 1rpx solid #f1f1f1;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+}
+
+/* 第一个图标的外层 */
+.navIcon_1 {
+    width: 151rpx;
+    height: 97rpx;
+    margin-left: 50rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 第一个图标 没选中 */
+.navIcon_1 image {
+    width: 45rpx;
+    height: 45rpx;
+}
+
+/* 第一个图标 没选中 */
+.navIcon_1_select {
+    height: 45rpx;
+    width: 45rpx;
+}
+
+/* 第二个图标的外层 */
+.navIcon_2 {
+    width: 151rpx;
+    height: 97rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 100rpx;
+}
+
+/* 第二个图标 没选中 */
+.navIcon_2 image {
+    width: 45rpx;
+    height: 45rpx;
+}
+
+/* 第二个图标 选中 */
+.navIcon_2_select {
+    width: 45rpx;
+    height: 45rpx;
+}
+
+/* 底部导航栏 - 文字 */
+.nav_bottom_text {
+    font-size: 23rpx;
+}
+
+/* 底部导航栏 - 选中文字 */
+.nav_bottom_text_select {
+    font-size: 23rpx;
+    color: #bbbbbb;
+}
+
+/* 第三个图标的外层 */
+.navIcon_3 {
+    width: 151rpx;
+    height: 97rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 100rpx;
+}
+
+/* 第三个图标 没选中 */
+.navIcon_3 image {
+    width: 40rpx;
+    height: 45rpx;
+}
+
+/* 第三个图标 选中 */
+.navIcon_3_select {
+    width: 40rpx;
+    height: 45rpx;
+}
+
+/* 获取手机号的外边框; */
+.getPhoneDiv {
+    width: 610rpx;
+    margin-top: 372rpx;
+    margin-left: 76rpx;
+    border-radius: 9rpx;
+    padding-top: 93rpx;
+    padding-bottom: 36rpx;
+}
+
+/* 获取手机号 */
+.getPhone {
+    text-align: center;
+    color: #000000;
+    font-size: 35rpx;
+}
+
+/* 获取手机号的描述 */
+.getPhoneDesc {
+    margin-top: 37rpx;
+    text-align: center;
+    color: #333333;
+}
+
+/* 获取手机号的确认按钮 */
+.getPhoneDivButton {
+    width: 547rpx;
+    border: 1rpx solid #f1f1f1;
+    border-radius: 34rpx;
+    margin-top: 76rpx;
+    margin-left: 32rpx;
+    text-align: center;
+    background-color: #bbbbbb;
+    color: white;
+    font-size: 30rpx;
+}

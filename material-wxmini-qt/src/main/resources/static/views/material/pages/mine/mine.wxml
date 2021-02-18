@@ -1,0 +1,277 @@
+<!-- 我的 -->
+<import src="../template/template.wxml" />
+<view style="padding-bottom:100rpx;position:fixed">
+	<!-- 上面的选项框 -->
+	<view class="bg-white all_title">
+		<!-- 头像和名称; -->
+		<view class="photoAndName">
+			<image class="userphoto" src="{{userInfo.avatarUrl}}"></image>
+			<view class="nameView">
+				<image class="vipLogo" src="/images/icon/crown.png"></image>
+				<view>{{userInfo.nickName}}</view>
+			</view>
+		</view>
+		<!-- 下面的页面显示选择按钮 ->已授权 -->
+		<view  class="pageNameBtnView">
+			<view class="btnView" bindtap="collectPage" style="width: {{ isPowerFlag ? '20%':'25%'}}">
+				<image class="collectIconImg" wx:if="{{collectPageFlag}}" src="/images/icon/collected.png"></image>
+				<image class="collectIconImg" wx:if="{{!collectPageFlag}}" src="/images/icon/collect.png"></image>
+				<view class="btnText">收藏</view>
+			</view>
+			<view class="btnView" bindtap='footprintPage' style="width: {{ isPowerFlag ? '20%':'25%'}}">
+				<image class="zujiIconImg" wx:if="{{!footprintPageFlag}}" src="/images/icon/footprint.png"></image>
+				<image class="zujiIconImg" wx:if="{{footprintPageFlag}}" src="/images/icon/footprintSelected.png">
+				</image>
+				<view class="btnText">足迹</view>
+			</view>
+			<view wx:if="{{isPowerFlag}}" class="btnView" bindtap="informPage" style="width: {{ isPowerFlag ? '20%':'25%'}};position:relative;">
+				<image class="informIconImg" wx:if="{{!informPageFlag}}" src="/images/icon/notice.png"></image>
+				<image class="informIconImg" wx:if="{{informPageFlag}}" src="/images/icon/noticeSelected.png"></image>
+				<view class="btnText">通告</view>
+				<view wx:if="{{unReadMsgNumFlag==true}}" class="newMsg"></view>
+			</view>
+			<view class="btnView" bindtap="usPage" style="width: {{ isPowerFlag ? '20%':'25%'}}">
+				<image class="usPageIconImg" wx:if="{{!usPageFlag}}" src="/images/icon/us.png"></image>
+				<image class="usPageIconImg" wx:if="{{usPageFlag}}" src="/images/icon/usSelected.png"></image>
+				<view class="btnText">我们</view>
+			</view>
+			<!-- 客服按钮 -->
+			<view class="kefu" style="width: {{ isPowerFlag ? '20%':'25%'}}">
+				<button app-parameter="/images/1.png" send-message-path="/pages/databank/dataBankHome"
+					show-message-card="{{true}}" send-message-img="/images/icon/permission.jpg"
+					style="width:55rpx;height:100rpx;padding:0;background:rgba(0,0,0,0.0);font-weight:normal;"
+					open-type="contact">
+					<view class="kefuContent">
+						<image src="/images/icon/leaveMess.png"></image>
+						<view>客服</view>
+					</view>
+				</button>
+			</view>
+		</view>
+	</view>
+	<!-- 下面的主要内容 -->
+	<view class="all_Content" style="height: {{ktxWindowHeight-478}}rpx;">
+		<!-- 收藏选中 -->
+		<view wx:if="{{collectPageFlag}}" style="height: 100%">
+			<scroll-view wx:if="{{collectionList.length>0}}" class="scrollDiv" scroll-y style="height: 100%"
+				bindscrolltolower="nextCollectPage">
+				<view class="waterFull">
+					<view class="left">
+						<view wx:for="{{leftList}}" wx:key="index" class="radius bg-white" style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-pagetype="collect" data-item="{{item}}" class="radius"
+								src="{{imageHost + item.imageUrl}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.collectionTitle}}
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv" bindtap="deleteCollect" data-item="{{item}}">
+									<image class="imageDlete" src="/images/icon/delete.jpg"></image>
+									<text class="haveIconText">删除</text>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="placeHolderView"></view>
+					<view class="right">
+						<view wx:for="{{rightList}}" wx:key="index" class="radius bg-white" style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-pagetype="collect" data-item="{{item}}" class="radius"
+								src="{{imageHost + item.imageUrl}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.collectionTitle}}
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv" bindtap="deleteCollect" data-item="{{item}}">
+									<image class="imageDlete" src="/images/icon/delete.jpg"></image>
+									<text class="haveIconText">删除</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+			<!-- 足迹数据为空; -->
+			<view wx:if="{{collectionList.length==0}}" class="bg-white currentCard-noData"
+				style="height:{{ktxWindowHeight-480}}rpx;">
+				<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+				没有数据
+			</view>
+		</view>
+		<!-- 足迹选中 -->
+		<view wx:if="{{footprintPageFlag}}" style="height: 100%">
+			<!-- 足迹删除 -->
+			<scroll-view wx:if="{{footprintList.length>0}}" class="scrollDiv" scroll-y style="height:100%;"
+				bindscrolltolower="nextFootmarkPage" scroll-into-view="{{toView}}">
+				<!-- 足迹数据不为空; -->
+				<view bindtap="footprintShowClearHistory" class="clearHistoryBtn">清除记录</view>
+				<view class="waterFull">
+					<view class="left">
+						<view wx:for="{{leftList}}" wx:key="index" class="radius bg-white" style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-pagetype="footmark" data-item="{{item}}" class="radius"
+								src="{{imageHost + item.imageUrl}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.footmarkTitle}}
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv" bindtap="footprintCollect" data-item="{{item}}">
+									<image wx:if="{{item.isCollection == 0}}" class="imageCollect"
+										src="/images/icon/collect.png"></image>
+									<image wx:if="{{item.isCollection == 1}}" class="imageCollect"
+										src="/images/icon/collected.png"></image>
+									<text class="haveIconText">收藏</text>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="placeHolderView"></view>
+					<view class="right">
+						<view wx:for="{{rightList}}" wx:key="index" class="radius bg-white" style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-pagetype="footmark" data-item="{{item}}" class="radius"
+								src="{{imageHost + item.imageUrl}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.footmarkTitle}}
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv" bindtap="footprintCollect" data-item="{{item}}">
+									<image wx:if="{{item.isCollection == 0}}" class="imageCollect"
+										src="/images/icon/collect.png"></image>
+									<image wx:if="{{item.isCollection == 1}}" class="imageCollect"
+										src="/images/icon/collected.png"></image>
+									<text class="haveIconText">收藏</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+			<!-- 足迹数据为空; -->
+			<view wx:if="{{footprintList.length==0}}" class="bg-white currentCard-noData"
+				style="height:{{ktxWindowHeight-480}}rpx;">
+				<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+				没有数据
+			</view>
+		</view>
+		<!-- 通告选中 -->
+		<view wx:if="{{informPageFlag}}" style="height: 100%">
+			<scroll-view wx:if="{{informList.length>0}}" style="height:100%;" enhanced="{{true}}" class="scrollDiv"
+				scroll-y="true" bindscrolltolower="nextInformList" scroll-into-view="{{toView}}"
+				scroll-top="{{scrollTop}}">
+				<view class="waterFull">
+					<view class="left">
+						<view wx:for="{{informList}}" wx:if="{{index%2==0}}" wx:key="index" class="radius bg-white"
+							style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-item="{{item}}" data-pagetype="inform" class="radius"
+								src="{{imageHost + item.messageImage}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.messageTitle}}
+									<view wx:if="{{item.isRead=='1'}}" style="float:right;right:20rpx;"
+										class="cu-tag round bg-green sm">
+										已读
+									</view>
+									<view wx:if="{{item.isRead=='0'}}" style="float:right;right:20rpx;"
+										class="cu-tag round bg-orange sm">
+										未读
+									</view>
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv">
+									<text class="noIconText">{{item.createTime}}</text>
+								</view>
+							</view>
+						</view>
+					</view>
+					<view class="placeHolderView"></view>
+					<view class="right">
+						<view wx:for="{{informList}}" wx:if="{{index%2==1}}" wx:key="index" class="radius bg-white"
+							style="margin-bottom:8rpx;">
+							<image bindtap="jumpToDetail" data-item="{{item}}" data-pagetype="inform" class="radius"
+								src="{{imageHost + item.messageImage}}" mode="widthFix"></image>
+							<view class="bg-white radius descAndCollectDiv">
+								<view class="text-left desc">
+									{{item.messageTitle}}
+									<view wx:if="{{item.isRead=='1'}}" style="float:right;right:20rpx;"
+										class="cu-tag round bg-green sm">
+										已读
+									</view>
+									<view wx:if="{{item.isRead=='0'}}" style="float:right;right:20rpx;"
+										class="cu-tag round bg-orange sm">
+										未读
+									</view>
+								</view>
+								<!-- 字体图标 + 删除 -->
+								<view class="collectDiv">
+									<text class="noIconText">{{item.createTime}}</text>
+								</view>
+							</view>
+						</view>
+					</view>
+				</view>
+			</scroll-view>
+			<view wx:if="{{informList.length==0}}" class="currentCard-noData bg-white"
+				style="height:{{ktxWindowHeight-480}}rpx;">
+				<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+				没有数据
+			</view>
+		</view>
+		<!-- 我们选中 -->
+		<view wx:if="{{usPageFlag && aboutUsList.length>0}}" class="bg-white"
+			style="height: {{ktxWindowHeight-500}}rpx;margin-bottom:20rpx">
+			<video wx:if="{{aboutUsData.fileType=='视频'}}" id="myVideo" style=" width: 100%;border-radius: 6rpx;"
+				src="{{aboutUsData.fileUrl}}" enable-danmu controls show-fullscreen-btn show-center-play-btn="{{false}}"
+				auto-pause-if-navigate auto-pause-if-open-native enable-play-gesture="{{true}}"
+				show-play-btn="{{false}}" object-fit="fill" bindpause="bindpause" bindended="bindended">
+				<cover-view class="video_cover" wx:if="{{isShow}}" bindtap="bindplay">
+					<cover-image wx:if="{{showcoverImage}}" src="/images/8.png" mode="widthFix"></cover-image>
+					<cover-image src="{{pauseBtnSrc}}" mode="widthFix" class="video_play_icon"></cover-image>
+					<cover-view class="video_bg_black">
+					</cover-view>
+				</cover-view>
+			</video>
+			<scroll-view scroll-y style="height:100%;" scroll-into-view="{{toView}}">
+				<image bindtap="previewMinePage" wx:if="{{aboutUsData.fileType=='image/jpeg'}}"
+					src="{{imageHost + aboutUsData.fileUrl}}" style="width:100%;" mode="widthFix"></image>
+				<view wx:if="{{aboutUsData!='' && aboutUsData!=undefined }}"
+					style="text-indent:30rpx;padding:0 20rpx;line-height:48rpx;">{{aboutUsData.textContent}}</view>
+			</scroll-view>
+		</view>
+		<view wx:if="{{usPageFlag && aboutUsList.length==0}}" style="height:395rpx;">
+			<view class="bg-white currentCard-noData" style="height:{{ktxWindowHeight-480}}rpx;">
+				<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+				没有数据
+			</view>
+		</view>
+	</view>
+</view>
+<!-- 我的收藏  --- 删除！！！ -->
+<view wx:if="{{deleteCollectFlag}}" class="customeDialog">
+	<scroll-view scroll-y>
+		<view class="bg-white dialog_mine_delete {{deleteCollectFlag?'animated zoomIn faster':'animated zoomOut faster'}}">
+			<view class="content">
+				<view class="title">删除收藏</view>
+				<view class="desc">您确定要删除吗？
+				</view>
+			</view>
+			<view style="display:flex;">
+				<view class="cancelBtn" bindtap="cancelDeleteCollect">取消</view>
+				<view class="confirmBtn" bindtap="deleteCollectSuccess" data-collectionid="{{item}}">删除</view>
+			</view>
+		</view>
+	</scroll-view>
+</view>
+
+<!-- 我的足迹  --- 删除！！！ -->
+<view wx:if="{{clearHistoryConfrimPage}}" class="customeDialog ">
+	<scroll-view scroll-y class="{{clearHistoryConfrimPage?'animated zoomIn faster':'animated zoomOut faster'}}">
+		<view class="bg-white footmarkDelView" >
+			<view data-time="DAY" bindtap="footmarkDel" class="jintian">今天</view>
+			<view data-time="WEEK" bindtap="footmarkDel" class="passWeek">过去一周</view>
+			<view data-time="ALL" bindtap="footmarkDel" class="allTime">所有时间</view>
+		</view>
+		<view bindtap="footprintClearHistoryCancel" class="bg-white cancelCss">取消</view>
+	</scroll-view>
+</view>
+<template is="navBottom" data="{{selectNav}}" />

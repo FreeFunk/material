@@ -1,0 +1,97 @@
+<!--报价-->
+<import src="/pages/template/template.wxml" />
+<view wx:if="{{!noDataNowFlag}}" style="padding-bottom:98rpx;">
+	<!-- 最上层的标签 -->
+	<view class="headerTags">
+		<scroll-view scroll-x="true" style="white-space:nowrap;overflow:hidden;padding-right:140rpx;">
+			<!-- 循环标签用 -->
+			<block wx:for="{{priceObjList}}" wx:key="index">
+				<view bindtap="clickTitleTags" data-index="{{index}}" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'tagSelected':'tag'}}">{{item.productPriceName}}</view>
+			</block>
+		</scroll-view>
+		<view bindtap="openAllTags" class="allTagsBtn">
+			全部 <text class="lg text-gray {{openAllTagsFlag?'cuIcon-fold':'cuIcon-unfold'}}"></text>
+		</view>
+	</view>
+	<!-- 展开的标签内容 -->
+	<view wx:if="{{openAllTagsFlag}}" class="bg-white allHideTags">
+		<block wx:for="{{priceObjList}}" wx:key="index">
+			<view bindtap="clickTitleTags" data-index="{{index}}" data-item="{{item}}" class="{{selectedTitleTag.id == item.id?'hideTags_selected':'hideTags'}}">{{item.productPriceName}}</view>
+		</block>
+	</view>
+	<view style="margin-top:80rpx;">
+		<!-- <scroll-view enhanced="{{true}}" class="scrollDiv" scroll-y="true" style="height: {{ktxWindowHeight-79-98}}rpx;" scroll-into-view="{{toView}}" scroll-top="{{scrollTop}}"> -->
+		<view>
+			<swiper style="height:{{imgheights}}rpx;" current="{{currentImgIndex}}" data-obj="{{item}}" bindchange="changeImg" indicator-dots="{{false}}" autoplay="{{false}}" duration="500">
+				<swiper-item wx:for="{{priceObjList}}" wx:key="index">
+					<image bindtap="previewImages" data-imageurl="{{item.imageUrl}}" data-index="{{index}}" style="width:750rpx;" mode="widthFix" src="{{imageHost + item.caseMiniImg}}" bindload="imageLoad"></image>
+				</swiper-item>
+			</swiper>
+		</view>
+		<view wx:if="{{showFileList.length>0}}" wx:for="{{showFileList}}" wx:key="index">
+			<!-- xls -->
+			<view class="fileDiv" wx:if="{{item.fileType=='xls'||item.fileType=='xlsx'}}">
+				<view class="fileContent">
+					<!-- 图标 -->
+					<image bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" src="/images/icon/icon_xsl.png"></image>
+					<!-- 文字部分 -->
+					<view class="textDiv" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+						<view class="title">{{item.fileName}}</view>
+						<view class="uploadTime">上传时间:{{item.createTime}}</view>
+					</view>
+					<!-- 转发链接 -->
+					<view class="redirect" bindtap='copyText' data-text="{{item.fileUrl}}">
+						<image src="/images/icon/redirect.png"></image>
+						<text> 转发链接</text>
+					</view>
+				</view>
+			</view>
+			<!-- doc -->
+			<view bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" class="fileDiv" wx:if="{{item.fileType=='docx'||item.fileType=='doc'}}">
+				<view class="fileContent">
+					<!-- 图标 -->
+					<image src="/images/icon/icon_word.png"></image>
+					<!-- 文字部分 -->
+					<view class="textDiv" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+						<view class="title">{{item.fileName}}</view>
+						<view class="uploadTime">上传时间:{{item.createTime}}</view>
+					</view>
+					<!-- 转发链接 -->
+					<view class="redirect" bindtap='copyText' data-text="{{item.fileUrl}}">
+						<image src="/images/icon/redirect.png"></image>
+						<text> 转发链接</text>
+					</view>
+				</view>
+			</view>
+			<!-- pdf -->
+			<view bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}" class="fileDiv" wx:if="{{item.fileType=='pdf'}}">
+				<view class="fileContent">
+					<!-- 图标 -->
+					<image src="/images/icon/icon_xsl.png"></image>
+					<!-- 文字部分 -->
+					<view class="textDiv" bindtap="previewFile" data-filetype="{{item.fileType}}" data-filepath="{{item.fileUrl}}">
+						<view class="title">{{item.fileName}}</view>
+						<view class="uploadTime">上传时间:{{item.createTime}}</view>
+					</view>
+					<!-- 转发链接 -->
+					<view class="redirect" bindtap='copyText' data-text="{{item.fileUrl}}">
+						<image src="/images/icon/redirect.png"></image>
+						<text> 转发链接</text>
+					</view>
+				</view>
+			</view>
+		</view>
+		<view class="bg-white" wx:if="{{showFileList.length==0}}" style="text-align:center;padding:20rpx;margin-top:20rpx;">
+			暂无文件数据
+		</view>
+		<!-- </scroll-view> -->
+	</view>
+</view>
+<view wx:if="{{noDataNowFlag}}" style="padding-bottom:98rpx;height:{{ktxWindowHeight}}rpx;text-align:center" class="bg-white">
+	<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+	<block wx:if="{{noDataNowFlag}}">暂无数据</block>
+</view>
+
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />
+<template is="loadPreviewFile" data="{{loadPreviewFileFlag}}" />

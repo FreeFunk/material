@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialProductIntroduction-form" id="MaterialProductIntroduction-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属材料ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialId" lay-verify="required" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">材料名称</label>
+            <div class="layui-input-block">
+                <select name="materialId" id="materialId" lay-filter="materialId"  lay-verify="required">
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">介绍类型</label>
+            <div class="layui-input-block">
+                <input type="radio" lay-filter="productTypeSelect" lay-verify="required" name="productType" value="1" title="产品图片">
+                <input type="radio" lay-filter="productTypeSelect" lay-verify="required" name="productType" value="2" title="产品资料">
+            </div>
+        </div>
+
+
+        <div class="layui-form-item" id="productTypeImg" style="display: none">
+            <label class="layui-form-label">产品图片</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="imageUrlUpload">上传图片</button>
+                    <div class="layui-upload-list">
+                        <label class="layui-form-label" style="position: absolute;font-size:13px;left: -119%;">封面图</label>
+                        <div id="imgDiv">
+
+                        </div>
+                        <input type="hidden" id="imageUrl" name="imageUrl"  class="layui-input">
+                        <!--<p id="demoText"></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-left: 4%" id="productTypeFlie" style="display: none">
+            <div class="layui-upload">
+                <button type="button" class="layui-btn layui-btn-normal" id="testList">选择多文件</button>
+                <div class="layui-upload-list">
+                    <table class="layui-table">
+                        <thead>
+                        <tr><th>文件名</th>
+                            <th>大小</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr></thead>
+                        <tbody id="demoList"></tbody>
+                    </table>
+                </div>
+                <button type="button" class="layui-btn" id="testListAction">开始上传</button>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="fileName">
+    <input type="hidden" id="fileUrl">
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialProductIntroduction-form-submit" id="MaterialProductIntroduction-form-submit" value="确认添加">
+    </div>
+</div>
+<script id="materialNameSelect" type="text/html">
+    <option value="">请选择材料</option>
+    {{#  layui.each(d.data, function(index, item){ }}
+    <option value="{{item.id}}">{{ item.materialName }}</option>
+    {{#  }); }}
+</script>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','laydate','laytpl','viewer','upload'], function(){
+            var $ = layui.$
+                ,laydate = layui.laydate
+                ,upload  = layui.upload
+                ,admin  = layui.admin
+                ,viewer = layui.viewer
+                ,laytpl = layui.laytpl
+                ,form = layui.form;
+
+            //查询该学校下面的专业信息
+            function selectMaterialList(){
+                admin.req({
+                    url:layui.setter.basePath + "/material/material/materialNameAll.jsn",
+                    data:{},
+                    method:'post',
+                    async:false,
+                    success:function(data){
+                        if(data.success){
+                            var getTpl = document.getElementById("materialNameSelect").innerHTML,
+                                view = document.getElementById("materialId");
+                            laytpl(getTpl).render(data,function(html){
+                                view.innerHTML = html;
+                                form.render();
+                            })
+                        }
+                    }
+                })
+            }
+            selectMaterialList();
+
+            var headers = layui.admin.getTokenHeader();
+            var imageUrlUpload = upload.render({
+                elem: '#imageUrlUpload'
+                ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn' //改成您自己的上传接口
+                ,headers:headers
+                ,multiple: true
+                ,accept:'images'
+                ,acceptMime:'image/*'
+                ,size:5120*10 //设置文件最大可允许上传的大小，单位 KB
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        var html = $('#imgDiv').html();
+                        if(html==null || html.length==0){
+                            $('#imgDiv').html('<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">');
+                        }else {
+                            html = html +  '<img onclick="getImg(this)" src="'+result+'" style="height: 50px;margin-right: 1%;" class="layui-upload-img" id="imageUrlShow">';
+                            $('#imgDiv').html(html);
+                        }
+                    });
+                }
+                ,done: function(res){
+                    //如果上传失败
+                    if(res.code > 0){
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                    var imageUrl = $("#imageUrl").val();
+                    if(imageUrl==''){
+                        $('#imageUrl').val(res.data);
+                    }else {
+                        $('#imageUrl').val(imageUrl+','+res.data);
+                    }
+
+                }
+            });
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            //多文件列表示例
+            var demoListView = $('#demoList')
+                ,uploadListIns = upload.render({
+                elem: '#testList'
+                ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn'
+                ,accept: 'file'
+                ,multiple: true
+                ,auto: false
+                ,headers:headers
+                ,bindAction: '#testListAction'
+                ,choose: function(obj){
+                    var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+                    //读取本地文件
+                    obj.preview(function(index, file, result){
+                        var fileName = $('#fileName').val();
+                        if(fileName==''){
+                            $('#fileName').val(file.name);
+                        }else {
+                            $('#fileName').val(fileName+','+file.name);
+                        }
+                        var tr = $(['<tr id="upload-'+ index +'">'
+                            ,'<td>'+ file.name +'</td>'
+                            ,'<td>'+ (file.size/1024).toFixed(1) +'kb</td>'
+                            ,'<td>等待上传</td>'
+                            ,'<td>'
+                            ,'<button class="layui-btn layui-btn-xs demo-reload layui-hide">重传</button>'
+                            ,'<button class="layui-btn layui-btn-xs layui-btn-danger demo-delete">删除</button>'
+                            ,'</td>'
+                            ,'</tr>'].join(''));
+
+                        //单个重传
+                        tr.find('.demo-reload').on('click', function(){
+                            obj.upload(index, file);
+                        });
+
+                        //删除
+                        tr.find('.demo-delete').on('click', function(){
+                            var fileName = $('#fileName').val();
+                            var str = fileName.split(',');
+                            var fileNameStr = '';
+                            var trIndex = index.split('-');
+                            $.each(str, function(i,val){
+                                if (i != trIndex[trIndex.length-1]){
+                                    if(fileNameStr == ''){
+                                        fileNameStr = val;
+                                    }else {
+                                        fileNameStr = fileNameStr+','+val;
+                                    }
+                                }
+                            });
+                            $('#fileName').val(fileNameStr);
+                            delete files[index]; //删除对应的文件
+                            tr.remove();
+                            uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+                        });
+
+                        demoListView.append(tr);
+                    });
+                }
+                ,done: function(res, index, upload){
+                    debugger
+                    if(res.data){ //上传成功
+                        var tr = demoListView.find('tr#upload-'+ index)
+                            ,tds = tr.children();
+                        tds.eq(2).html('<span style="color: #5FB878;">上传成功</span>');
+                        tds.eq(3).html(''); //清空操作
+                        var fileUrl = $('#fileUrl').val();
+                        if(fileUrl==''){
+                            $("#fileUrl").val(res.data);
+                        }else {
+                            $("#fileUrl").val(fileUrl+','+res.data);
+                        }
+                        return delete this.files[index]; //删除文件队列已经上传成功的文件
+                    }
+
+
+                    this.error(index, upload);
+                }
+                ,error: function(index, upload){
+                    var tr = demoListView.find('tr#upload-'+ index)
+                        ,tds = tr.children();
+                    tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
+                    tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+                }
+            });
+
+
+            form.on('radio(productTypeSelect)',function(data){
+                var questionType = data.value;
+                if(questionType == '1'){//单选 多选
+                    $("#productTypeFlie").css("display","none");
+                    $("#productTypeImg").css("display","block");
+                }else if(questionType == '2'){
+                    $("#productTypeImg").css("display","none");
+                    $("#productTypeFlie").css("display","block");
+                }
+                form.render();
+            })
+            //监听提交
+            form.on('submit(MaterialProductIntroduction-form-submit)', function(data){
+                //imageUrl fileUrl fileName
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                var productTypeSelect = $("input[name='productType']:checked").val();
+                if (productTypeSelect == '1'){//产品图片
+                    var imageUrl = $('#imageUrl').val();
+                    field.fileUrl = imageUrl;
+                }else {
+                    var fileUrl = $('#fileUrl').val();
+                    var fileName = $('#fileName').val();
+                    if (fileName=='' || fileUrl==''){
+                        return layer.msg('请上传文件!');
+                    }else {
+                        field.fileUrl = fileUrl;
+                        field.fileName = fileName;
+                    }
+                }
+                field.productType = productTypeSelect;
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                admin.req({
+                    url:layui.setter.basePath +'/material/materialProductIntroduction/insertProductIntroduction.jsn',
+                    data:field,
+                    method:"post",
+                    success:function (data) {
+                        if(data.success){
+                            parent.layui.table.reload('MaterialProductIntroduction-list'); //重载表格
+                            parent.layer.close(index); //再执行关闭
+                            parent.layer.msg('添加成功', {
+                                icon: 1
+                            });
+                        }else{
+                            parent.layer.msg(data.errMsg, {
+                            });
+                        }
+
+                    },
+                });
+
+            });
+            laydate.render({
+                elem: '#createTime', //指定元素
+                type:'datetime'
+            });
+            laydate.render({
+                elem: '#shTime', //指定元素
+                type:'datetime'
+            });
+        })
+</script>
+</body>
+</html>

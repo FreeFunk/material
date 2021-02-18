@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html id="materialContent">
+<head>
+    <meta charset="utf-8">
+    <title>材料详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<style>
+    .imgStyle{
+        width:90%;
+        height:150px;
+        margin-left:5%;
+    }
+</style>
+<body>
+
+<div class="layui-form" lay-filter="MaterialDetail-form" id="MaterialDetail-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">主键</label>
+            <div class="layui-input-block">
+                <input type="text" id="id" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品样式信息</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">厂商名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="createUserName" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">材料名称</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="materialName" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">产品样式</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="styleName" disabled class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">首页展示</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" id="isShowHome" disabled checked  lay-skin="switch" lay-text="是|否">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs7 layui-col-sm7 layui-col-md7">
+                <div class="layui-card">
+                    <div class="layui-card-header">产品介绍文件</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item" id="fileImgCon" style="display: none;">
+                            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">
+                                        缩略图
+                                    </div>
+                                    <div class="layui-card-body">
+                                        <img id="miniImg" onclick="getImg(this)" class="imgStyle" src=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">
+                                        展示图
+                                    </div>
+                                    <div class="layui-card-body">
+                                        <img id="showImageUrl" onclick="getImg(this)" class="imgStyle" src=""/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">
+                                        原图
+                                    </div>
+                                    <div class="layui-card-body">
+                                        <img id="orgImageUrl" onclick="getImg(this)" class="imgStyle" src=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item" id="fileCon" style="display: none;">
+                            <table class="layui-table">
+                                <thead>
+                                <tr>
+                                    <th>文件名称</th>
+                                    <th>文件类型</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td id="fileName"></td>
+                                    <td id="fileType"></td>
+                                    <td>
+                                        <input type="hidden" id="fileUrl"/>
+                                        <button type="button" onclick="downLoadFile()" class="layui-btn layui-btn-sm layui-btn-normal">下载文件</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="Material-form-detail" id="Material-form-detail" value="提交审核">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            $tool:'tool',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','$tool','laydate','viewer','upload'], function(){
+
+            var $ = layui.$
+                ,$tool = layui.$tool
+                ,laydate = layui.laydate
+                ,admin = layui.admin
+                ,upload  = layui.upload
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            var imgHost = layui.setter.ImgPath;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            //加载产品样式文件
+            loadInfoById();
+
+            function loadInfoById(){
+                var id = $("#id").val();
+                admin.req({
+                    url: layui.setter.basePath + "/materialProductStyle/loadById.jsn",
+                    method:'post',
+                    data:{"id":id},
+                    success:function(data){
+                        if(data.success){
+                            //展示审核页面
+                            var styleVo = data.data;
+                            $("#styleName").val(styleVo.styleName);
+                            $("#materialName").val(styleVo.materialName);
+                            $("#createUserName").val(styleVo.createUserName);
+                            var productStyle = styleVo.productType;
+                            if(productStyle != null && productStyle=='1'){
+                                var miniImg = styleVo.miniImg;
+                                var showImageUrl = styleVo.showImageUrl;
+                                var orgImageUrl = styleVo.orgImageUrl;
+                                $("#fileImgCon").css("display","");
+                                $("#miniImg").attr("src",imgHost+miniImg);
+                                $("#showImageUrl").attr("src",imgHost+showImageUrl);
+                                $("#orgImageUrl").attr("src",imgHost+orgImageUrl);
+                            }else{
+                                var fileUrl = styleVo.fileUrl;
+                                $("#fileCon").css("display","");
+                                $("#fileName").html(styleVo.fileName);
+                                $("#fileType").html(styleVo.fileType);
+                                $("#fileUrl").val(fileUrl);
+                            }
+                            var isShowHome = styleVo.isShowHome;
+                            if(isShowHome=='1'){
+                                $("#isShowHome").attr("checked","checked");
+                            }else{
+                                $("#isShowHome").removeAttr("checked");
+                            }
+                            form.render();
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+            //下载文件
+            downLoadFile = function(){
+                var filePath = $("#fileUrl").val();
+                if(filePath != null && filePath != ''){
+                    var fileUrl = imgHost + filePath;
+                    window.location.href = fileUrl;
+                    layer.msg("文件已下载");
+                }
+            }
+
+        })
+</script>
+</body>
+</html>

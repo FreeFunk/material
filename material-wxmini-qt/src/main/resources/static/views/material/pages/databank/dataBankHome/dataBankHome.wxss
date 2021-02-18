@@ -1,0 +1,240 @@
+/* 资料库主页 */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 搜索框 */
+.search_border_bottom {
+    border-bottom: 1px solid #f4f4f4;
+    height: 100rpx;
+}
+
+/* 垂直导航相关 */
+
+.VerticalNav.nav {
+    width: 160rpx;
+    font-size: 24rpx;
+    white-space: initial;
+    height: calc(100vh - 190rpx);
+    padding: 0;
+}
+
+.VerticalNav.nav .cu-item {
+    width: 100%;
+    text-align: center;
+    background-color: #fff;
+    margin: 0;
+    border: none;
+    position: relative;
+    padding: 0;
+    border-radius: 3rpx;
+}
+
+.VerticalBox {
+    display: flex;
+    margin-top: 100rpx;
+}
+
+.VerticalMain {
+    background-color: #f1f1f1;
+    height: calc(100vh - 210rpx);
+}
+
+/* 
+  重写padding宽度(卡片列表右侧) 
+  ./colorui/main.wxss: 3296
+*/
+
+.padding-lr {
+    padding-left: 13rpx;
+    padding-right: 13rpx;
+}
+
+.titleTab {
+    background-color: #ffff0000;
+    width: 137rpx;
+    height: 80rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 30rpx;
+    color: #000000;
+    font-size: 24rpx;
+    border-radius: 30rpx;
+    padding: 0 5rpx;
+    border: 1rpx solid #f1f1f100;
+}
+
+/*
+  重写选中左侧标签事件；
+*/
+
+.selectTitleTab {
+    background-color: #bbbbbb;
+    width: 137rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80rpx;
+    line-height: 30rpx;
+    color: #ffffff;
+    font-size: 24rpx;
+    border-radius: 30rpx;
+    padding: 0 5rpx;
+    border: 1rpx solid #f1f1f1;
+}
+
+/*
+  轮播图和卡片列表的最外层;
+*/
+
+.swiper_card_list {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5rpx;
+}
+
+.swiper_card_list swiper {
+    height: 180rpx;
+    margin-top: 14rpx;
+    background-color: #f1f1f1;
+    border-radius: 5rpx;
+}
+
+.swiper_card_list swiper image {
+    border-radius: 5rpx;
+}
+
+/*
+  图标与标题
+*/
+
+.title {
+    display: flex;
+    margin-top: 24rpx;
+    margin-bottom: 39rpx;
+    position: relative;
+    padding-left: 5rpx;
+    background-color: #f1f1f1;
+}
+
+/* 卡片列表 logo */
+
+.title .image_logo {
+    width: 22rpx;
+    height: 36rpx;
+}
+
+/* 卡片列表 省略号 */
+
+.title .image_more {
+    width: 34rpx;
+    height: 7rpx;
+    position: absolute;
+    right: 29rpx;
+    top: 17rpx;
+}
+
+/* 卡片列表 标题 */
+
+.title view {
+    padding-left: 20rpx;
+    color: #000000;
+    font-weight: bold;
+}
+
+.content_manyCard {
+    min-height: 224rpx;
+    display: flex;
+}
+
+/* 卡片列表 小图片的最外层（包括图片加下面的介绍文字）*/
+
+.content_manyCard_content {
+    width: 187rpx;
+    height: 145rpx;
+    margin-right: 6rpx;
+}
+
+/* 卡片列表 小卡片的图片*/
+
+.content_manyCard_content image {
+    border-radius: 10rpx;
+    height: 100%;
+}
+
+/* 卡片列表  小卡片的文字*/
+
+.content_manyCard_content view {
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 23rpx;
+    color: #333333;
+    font-weight: 400;
+}
+
+/* 长图片--占位置的 */
+
+.content .image_long {
+    width: 100%;
+    height: 143rpx;
+    border-radius: 10rpx;
+}
+
+.caseColorCssImgDiv {
+    display: flex;
+}
+
+.caseColorCssImgDiv .bigPic {
+    width: 370rpx;
+    height: 430rpx;
+    margin-right: 8rpx;
+    display: flex;
+    flex-direction: column;
+}
+
+.caseColorCssImgDiv .bigPic image {
+    width: 100%;
+    border-radius: 10rpx;
+}
+
+.caseColorCssImgDiv .bigPic view {
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 23rpx;
+    color: #333333;
+    font-weight: 400;
+}
+
+.caseColorCssImgDiv .twoSmall {
+    width: 195rpx;
+    display: flex;
+    flex-direction: column;
+    height: 430rpx;
+}
+
+.caseColorCssImgDiv .twoSmall image {
+    height: 145rpx;
+    width: 195rpx;
+    border-radius: 10rpx;
+}
+
+.caseColorCssImgDiv .twoSmall .topText {
+    height: 60rpx;
+    line-height: 60rpx;
+    text-align: center;
+    font-size: 23rpx;
+    color: #333333;
+    font-weight: 400;
+}
+
+.caseColorCssImgDiv .twoSmall .bottomText {
+    height: 80rpx;
+    line-height: 80rpx;
+    text-align: center;
+    font-size: 23rpx;
+    color: #333333;
+    font-weight: 400;
+}

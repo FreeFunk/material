@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.edgedo.plant</groupId>
+		<artifactId>edgedo_plant</artifactId>
+		<version>1.0-RELEASE</version>
+	</parent>
+	<groupId>com.edgedo.material</groupId>
+	<artifactId>material-wxmini-qt</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+	<name>非森型材小程序后端服务</name>
+	<description>非森型材小程序后端服务</description>
+
+	<properties>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.edgedo.plant</groupId>
+			<artifactId>common-base</artifactId>
+			<version>1.0-RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>log4j</artifactId>
+                    <groupId>log4j</groupId>
+                </exclusion>
+				<exclusion>
+					<artifactId>log4j</artifactId>
+					<groupId>log4j</groupId>
+				</exclusion>
+			</exclusions>
+        </dependency>
+
+		<dependency>
+			<groupId>com.edgedo.plant</groupId>
+			<artifactId>sys-wx-miniprogram-client-starter</artifactId>
+			<version>1.1-RELEASE</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<finalName>spring-boot-material-wxmini-qt</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<fork>true</fork>
+					<addResources>true</addResources>
+					<classifier>exec</classifier>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+</project>

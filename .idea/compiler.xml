@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="sys-check" />
+        <module name="material-mng-ht" />
+        <module name="material-wxmini-qt" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="material-mng-ht" target="1.8" />
+      <module name="material-wxmini-qt" target="1.8" />
+      <module name="sys-check" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="material-mng-ht" options="-parameters" />
+      <module name="material-wxmini-qt" options="-parameters" />
+      <module name="sys-check" options="-parameters" />
+    </option>
+  </component>
+</project>

@@ -1,0 +1,35 @@
+<!--施工界面-->
+<import src="/pages/template/template.wxml" />
+
+<!-- 中间的内容展示区域 -->
+<view wx:if="{{!noDataNowFlag}}" style="padding-bottom:120rpx;">
+	<view class="bg-white card" style="min-height:{{ktxWindowHeight-140}}rpx;">
+		<!-- 标题 -->
+		<view class="title">
+			<image src="/images/icon/construction_instructions.png"></image>
+			<text>{{construction.buildTitle}}</text>
+		</view>
+		<!-- 摘要 -->
+		<view class="content">
+			{{construction.buildAbstract}}
+		</view>
+		<!-- 内容 -->
+		<view class="content" style="margin-bottom:30rpx;">
+			{{construction.buildContent}}
+		</view>
+		<!-- 视频内容 -->
+		<view wx:if="{{fileType != 'png' && fileType !='jpg'}}" class="videoDiv">
+			<video id="myVideo" src="{{imageHost + construction.fileUrl}}" bindleavepictureinpicture='bindVideoLeavePictureInPicture'></video>
+		</view>
+		<!-- 图片内容 -->
+		<view wx:if="{{fileType == 'jpg' || fileType == 'png'}}" class="videoDiv" style="margin-left:0;margin-right:0">
+			<image style="width:100%;" bindtap="previewImages" mode="widthFix" data-imageurl="{{imageHost + construction.fileUrl}}" src="{{imageHost + construction.fileUrl}}"></image>
+		</view>
+	</view>
+</view>
+<view wx:if="{{noDataNowFlag}}" style="padding-bottom:98rpx;height:{{ktxWindowHeight}}rpx;text-align:center" class="bg-white">
+	<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+	暂无数据
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

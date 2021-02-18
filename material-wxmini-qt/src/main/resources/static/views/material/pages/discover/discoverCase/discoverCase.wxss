@@ -1,0 +1,129 @@
+/* 发现 案例  */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 文字描述部分 */
+.descDiv {
+    height: 200rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 20rpx;
+}
+
+/* 文字描述的标题 */
+.descDiv .title {
+    font-size: 28rpx;
+    color: #000000
+}
+
+/* 前往图片原位置 */
+.link {
+    font-size: 20rpx;
+    color: #999999;
+    margin-top: 20rpx;
+}
+
+/* 标题 */
+
+/* 收藏 + 下载 的外层框 */
+.collecDownLoadDiv {
+    display: flex;
+    align-items: center;
+    margin-top: 40rpx;
+}
+
+/* 收藏 外层框*/
+.collect {
+    width: 100rpx;
+    height: 50rpx;
+    margin-right: 31rpx;
+    line-height: 50rpx;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 收藏 图标*/
+.collect image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+/* 收藏 文字*/
+.collect text {
+    padding-left: 7rpx;
+    font-size: 25rpx;
+    color: #000000;
+}
+
+.download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 下载 图标*/
+.download image {
+    width: 30rpx;
+    height: 30rpx;
+}
+
+/* 下载 文字*/
+.download text {
+    padding-left: 6rpx;
+    font-size: 25rpx;
+    color: #000000;
+}
+
+/* 同类推荐 */
+.sameRecomend {
+    font-size: 25rpx;
+    color: #999999;
+    height: 80rpx;
+    margin: 0;
+    line-height: 80rpx;
+    padding: 0 20rpx;
+}
+
+/* 同类推荐 瀑布流 */
+.sameRecomendWaterFull {
+    width: 732rpx;
+    margin: 0 9rpx;
+    display: flex;
+}
+
+/* 左边瀑布 */
+.leftWater {
+    width: 363rpx;
+}
+
+/* 瀑布流中的图片 */
+.waterFullImage {
+    margin-bottom: 5rpx;
+    border-radius: 2rpx;
+}
+
+/* 右边瀑布 */
+.rightWater {
+    width: 363rpx;
+    margin-left: 6rpx;
+}
+
+page {
+    height: 100%;
+}
+
+.con {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scroll {
+    flex: 1;
+    overflow: scroll;
+    padding-bottom: 100rpx;
+}

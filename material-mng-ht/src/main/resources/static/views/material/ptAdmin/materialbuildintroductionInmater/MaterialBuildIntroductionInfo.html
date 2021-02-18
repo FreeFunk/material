@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-card-header">
+        <font id="titleId"></font>
+        <a href="javascript:history.back()" style="    margin-top: 10px;
+    position: absolute;
+    right: 15px;" class="layui-btn layui-btn-normal layui-btn-xs">
+            <i style="position:initial;line-height: inherit" class="layui-icon layui-icon-return"></i>返回</a>
+    </div>
+    <div class="layui-card" style="margin-top: 2%;width: 54%;margin-left: 22%;height: 556px;border-radius: 19px;">
+        <div class="layui-form" lay-filter="MaterialBuildIntroduction-form" id="MaterialBuildIntroduction-form" style="padding: 20px 30px 0 0;">
+            <div class="layui-row">
+                <div class="layui-form-item layui-hide">
+                    <label class="layui-form-label">主键</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" id="id" placeholder="请输入主键" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div hidden class="layui-col-xs6 layui-col-sm6 layui-col-md6 layui-hide">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">所属材料ID</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="materialId" lay-verify="required" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">材料名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" readonly name="materialName" id="materialName" lay-verify="required" readonly placeholder="请输入材料名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">施工标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" readonly name="buildTitle" id="buildTitle" lay-verify="required" placeholder="请输入施工说明标题" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">施工摘要</label>
+                    <div class="layui-input-block">
+                        <input type="text" readonly name="buildAbstract" id="buildAbstract" lay-verify="required" placeholder="请输入施工说明摘要" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">施工内容</label>
+                    <div class="layui-input-block">
+                        <textarea id="buildContent" readonly name="buildContent" id="buildContent" readonly class="layui-textarea"></textarea>
+<!--                        <input type="text" name="buildContent" lay-verify="required" placeholder="请输入施工说明内容" autocomplete="off" class="layui-input">-->
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上传文件</label>
+                    <div class="layui-input-block">
+                        <div class="layui-upload">
+<!--                            <button type="button" class="layui-btn" id="imageUrlUpload">上传文件</button>-->
+                            <div class="layui-upload-list">
+<!--                                <label class="layui-form-label" style="position: absolute;font-size:13px;left: -119%;">封面图</label>-->
+                                <img onclick="getImg(this)" style="height: 111px;" class="layui-upload-img" id="imageUrlShow">
+                                <video id="videoattr" height="70px" ></video>
+                                <input type="hidden" id="fileUrl" name="fileUrl"  class="layui-input">
+                                <!--<p id="demoText"></p>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="fileType" name="fileType">
+                <button id="updateDataId" style="position: absolute;left: 65%;top: 92%;" type="button" class="layui-btn layui-btn-radius"><i class="layui-icon layui-icon-edit"></i>编辑</button>
+                <!--<div class="layui-form-item layui-hide">
+                    <input type="button" lay-submit lay-filter="MaterialBuildIntroduction-form-submit" id="MaterialBuildIntroduction-form-submit" value="确认添加">
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="/layuiadmin/layui/layui.js"></script>
+    <script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index',
+            $tool:'tool',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','laydate','laytpl','viewer','upload','$tool'], function(){
+            var $ = layui.$
+                ,laydate = layui.laydate
+                ,upload  = layui.upload
+                ,$tool = layui.$tool
+                ,admin  = layui.admin
+                ,viewer = layui.viewer
+                ,laytpl = layui.laytpl
+                ,form = layui.form;
+
+            var queryArgs = $tool.getUrlParams();//获取查询参数
+            var materialName = queryArgs.materialName;
+            $('#materialName').val(materialName);
+            var materialId = queryArgs.id;
+
+            var object;
+
+            $("#titleId")[0].innerText = "材料名称："+materialName;
+            function init() {
+                admin.req({
+                    url:layui.setter.basePath +'/material/materialBuildIntroduction/selectByMaterId.jsn',
+                    data:{
+                        'materId':materialId
+                    },
+                    method:"post",
+                    success:function (data) {
+                        if (!($.isEmptyObject(data.data))){
+                            object = data.data;
+                            //id materialId materialName buildTitle buildAbstract buildContent imageUrlShow fileType
+                            $("#id").attr("value",data.data.id);
+                            $("#materialId").attr("value",data.data.materialId);
+                            $("#materialName").attr("value",data.data.materialName);
+                            $("#buildTitle").attr("value",data.data.buildTitle);
+                            $("#buildAbstract").attr("value",data.data.buildAbstract);
+                            $("#buildContent").val(data.data.buildContent);
+                            $("#imageUrlShow").attr("src",layui.setter.ImgPath+data.data.fileUrl);
+                            $("#fileType").attr("value",data.data.fileType);
+
+                        }
+                    },
+                });
+            }
+            init();
+            $("#updateDataId").click(function() {
+                if($.isEmptyObject(object)){//isEmptyObject
+                    object = {materialName:materialName,materialId:materialId};
+                    $tool.JumpPage('MaterialBuildIntroductionInfoAdd.html', object);
+                }else {
+                    $tool.JumpPage('MaterialBuildIntroductionInfoEdit.html', object);
+                }
+            });
+
+            var headers = layui.admin.getTokenHeader();
+            var imageUrlUpload = upload.render({
+                elem: '#imageUrlUpload'
+                ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn' //改成您自己的上传接口
+                ,headers:headers
+                ,accept: 'file'
+                ,size:5120*10 //设置文件最大可允许上传的大小，单位 KB
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#fileType').val(file.type);
+                        debugger
+                        if (/image/.test(file.type)){
+                            $('#imageUrlShow').attr('src', result); //图片链接（base64）
+                        }else {
+                            $('#videoattr').attr('src',result);
+                        }
+                    });
+                }
+                ,done: function(res){
+                    //如果上传失败
+                    if(res.code > 0){
+                        return layer.msg('上传失败');
+                    }
+                    $("#fileUrl").val(res.data);
+
+                }
+            });
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            //监听提交
+            form.on('submit(MaterialBuildIntroduction-form-submit)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                admin.req({
+                    url:layui.setter.basePath +'/material/materialBuildIntroduction/saveOrUpdate.jsn',
+                    data:field,
+                    method:"post",
+                    success:function (data) {
+                        if(data.success){
+                            parent.layui.table.reload('MaterialBuildIntroduction-list'); //重载表格
+                            parent.layer.close(index); //再执行关闭
+                            parent.layer.msg('添加成功', {
+                                icon: 1
+                            });
+                        }else{
+                            parent.layer.msg(data.errMsg, {
+                            });
+                        }
+
+                    },
+                });
+
+            });
+            laydate.render({
+                elem: '#createTime', //指定元素
+                type:'datetime'
+            });
+            laydate.render({
+                elem: '#shTime', //指定元素
+                type:'datetime'
+            });
+        })
+    </script>
+</body>
+</html>

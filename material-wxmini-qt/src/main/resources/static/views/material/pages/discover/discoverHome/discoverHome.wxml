@@ -1,0 +1,85 @@
+<!-- 发现 -->
+<import src="/pages/template/template.wxml" />
+<view class="con">
+	<!-- 搜索框 -->
+	<view class="cu-bar bg-white search_border_bottom fixed">
+		<view class="search-form round">
+			<text class="cuIcon-search"></text>
+			<input value="{{searchLabelName}}" bindinput="searchByInput" bindfocus="showRecommendation" type="text"
+				placeholder="搜索效果图" confirm-type="搜索" bindconfirm="searchConfirm"></input>
+		</view>
+		<view wx:if="{{showCancelBtn}}" class="cancel">
+			<text bindtap="cancelSearch">取消</text>
+		</view>
+	</view>
+	<view wx:if="{{showRecommendationFlag}}" class="allTags bg-white" style="margin-top:100rpx;">
+		<view class="action" style="margin-top:20rpx;">
+			<text class="cuIcon-titles" style="color:#bbbbbb;font-size:26rpx;"></text>热门推荐
+		</view>
+		<view wx:if="{{materialRecomendation.length>0}}" class="content">
+			<block wx:for="{{materialRecomendation}}">
+				<view bindtap="clickRecomendationTag" data-labelname="{{item.labelName}}">{{item.labelName}}</view>
+			</block>
+		</view>
+	</view>
+	<view wx:if="{{searchDivFlag && materialListBySearch.length>0}}" class="bg-white shadow allHideTags search_dialog">
+		<view wx:if="{{materialListBySearch.length>0}}" class="content">
+			<block wx:for="{{materialListBySearch}}">
+				<view data-item="{{item}}" bindtap="clickSearchLabel">{{item}}</view>
+			</block>
+		</view>
+	</view>
+	<!-- 瀑布流 -->
+	<view style="margin-top:{{showRecommendationFlag ? 0:110}}rpx;" class="scroll" wx:if="{{caseList.length>0}}">
+		<scroll-view bindscroll="hideRecommendation" scroll-y style="height:100%;" bindscrolltolower="nextPage"
+			scroll-into-view="{{toView}}" wx:if="{{caseList.length>0}}">
+			<view style="width:368rpx;margin-left:4rpx;float:left">
+				<view wx:for="{{leftList}}" wx:key="index" class="radius bg-white" style="margin-top:8rpx;">
+					<image class="radius" data-item="{{item}}" src="{{imageHost + item.showImageUrl}}" mode="widthFix"
+						bindtap='jumpToCase'></image>
+					<view class="bg-white radius descAndCollectDiv">
+						<view class="text-left desc">
+							{{item.caseName}}
+						</view>
+						<!-- 字体图标 + 删除 -->
+						<view class="collectDiv" bindtap="collectSuccess" data-item="{{item}}"
+							data-collectionobj="{{item}}">
+							<image class="imageCollect" wx:if="{{item.isCollection==0}}" src="/images/icon/collect.png">
+							</image>
+							<image class="imageCollect" wx:if="{{item.isCollection==1}}"
+								src="/images/icon/collected.png"></image>
+							<text class="haveIconText">收藏</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<view style="width:6rpx;"></view>
+			<view style="width:368rpx;margin-right:4rpx;float:right">
+				<view wx:for="{{rightList}}" wx:key="index" class="radius bg-white" style="margin-top:8rpx;">
+					<image class="radius" data-item="{{item}}" src="{{imageHost + item.showImageUrl}}" mode="widthFix"
+						bindtap='jumpToCase'></image>
+					<view class="bg-white radius descAndCollectDiv">
+						<view class="text-left desc">
+							{{item.caseName}}
+						</view>
+						<!-- 字体图标 + 删除 -->
+						<view class="collectDiv" bindtap="collectSuccess" data-item="{{item}}"
+							data-collectionobj="{{item}}">
+							<image class="imageCollect" wx:if="{{item.isCollection==0}}" src="/images/icon/collect.png">
+							</image>
+							<image class="imageCollect" wx:if="{{item.isCollection==1}}"
+								src="/images/icon/collected.png"></image>
+							<text class="haveIconText">收藏</text>
+						</view>
+					</view>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+	<view wx:if="{{caseList.length==0}}" style="height:100%;text-align:center;font-size:22rpx;background-color: white;">
+		<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+		暂无数据
+	</view>
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

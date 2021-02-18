@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialAboutUs-form" id="MaterialAboutUs-form" style="width: 60%;margin-left:20%;padding: 20px 30px 0 0;">
+    <div class="layui-card">
+        <div class="layui-card-header" style="padding: 10px 15px 0 0;;">
+            <button type="button" style="float: right;" onclick="editInfo()" class="layui-btn layui-btn-sm">
+                <i style="line-height: inherit" class="layui-icon layui-icon-edit"></i>编辑</button>
+        </div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">文件信息</label>
+                    <div class="layui-input-block">
+                        <div id="fileCon" style="float: left;width: 60%;height: 150px;margin-left: 10%;border: 1px solid #e6e6e6">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">文本描述</label>
+                    <div class="layui-input-block" style="width: 80%;">
+                        <textarea id="textContent" placeholder="请输入内容" disabled class="layui-textarea">
+
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            viewer: 'layui_ext/viewer/viewer',
+            $tool:'tool'
+        }).use(['index', 'form','laydate','viewer','$tool'], function(){
+            var $ = layui.$
+                ,laydate = layui.laydate
+                ,admin  = layui.admin
+                ,viewer = layui.viewer
+                ,$tool = layui.$tool
+                ,form = layui.form;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            //编辑信息页面
+            editInfo = function(){
+                $tool.JumpPage("MaterialAboutUsEdit.html");
+            }
+
+            //初始化加载信息
+            function initAboutUsInfo(){
+                admin.req({
+                    url:layui.setter.basePath + "/material/materialAboutUs/loadInfoByUser.jsn",
+                    method:'post',
+                    data:{},
+                    success:function(data){
+                        if(data.success){
+                            var aboutUs = data.data;
+                            var fileType = aboutUs.fileType;
+                            var textContent = aboutUs.textContent;
+                            $("#textContent").text(textContent);
+                            var fileUrl = layui.setter.ImgPath + aboutUs.fileUrl;
+                            if(fileType.indexOf("image")!=-1){
+                                var html = "<img src='"+fileUrl+"' onclick='getImg(this)' style='width: 100%;height: 150px;'/>";
+                                $('#fileCon').html(html);
+                            }else{
+                                var html = "<video controls preload='auto' src='"+fileUrl+"' style='width: 100%;height: 150px;'/>";
+                                $('#fileCon').html(html);
+                            }
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                })
+            }
+            initAboutUsInfo();
+
+        })
+</script>
+</body>
+</html>

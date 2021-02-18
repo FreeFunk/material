@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialCaseImageMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialCaseImage" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="CASE_ID" property="caseId"/>
+			<result column="CASE_MINI_IMG" property="caseMiniImg"/>
+			<result column="SHOW_IMAGE_URL" property="showImageUrl"/>
+			<result column="ORG_IMAGE_URL" property="orgImageUrl"/>
+			<result column="ORDER_NUM" property="orderNum"/>
+			<result column="DATA_STATE" property="dataState"/>
+			<result column="SH_STATE" property="shState"/>
+			<result column="NOT_PASS_TEXT" property="notPassText"/>
+			<result column="SH_USER_ID" property="shUserId"/>
+			<result column="SH_USER_NAME" property="shUserName"/>
+			<result column="SH_TIME" property="shTime"/>
+			<result column="IMAGE_TITLE" property="imageTitle"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialCaseImageView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, CASE_ID, CASE_MINI_IMG,
+	 SHOW_IMAGE_URL, ORG_IMAGE_URL, ORDER_NUM, DATA_STATE,
+	  SH_STATE, NOT_PASS_TEXT, SH_USER_ID, SH_USER_NAME, SH_TIME,IMAGE_TITLE
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		DATA_STATE='1'
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.caseId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.caseId)'>
+		AND  CASE_ID = #{queryObj.caseId}
+		</if>
+		<if test='queryObj != null and  queryObj.caseMiniImg != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.caseMiniImg)'>
+		AND  CASE_MINI_IMG = #{queryObj.caseMiniImg}
+		</if>
+		<if test='queryObj != null and  queryObj.showImageUrl != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.showImageUrl)'>
+		AND  SHOW_IMAGE_URL = #{queryObj.showImageUrl}
+		</if>
+		<if test='queryObj != null and  queryObj.orgImageUrl != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.orgImageUrl)'>
+		AND  ORG_IMAGE_URL = #{queryObj.orgImageUrl}
+		</if>
+		<if test='queryObj != null and  queryObj.dataState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.dataState)'>
+		AND  DATA_STATE = #{queryObj.dataState}
+		</if>
+		<if test='queryObj != null and  queryObj.imageTitle != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.imageTitle)'>
+			AND  IMAGE_TITLE like concat('%',#{queryObj.imageTitle},'%')
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialCaseImageQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_case_image 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialCaseImageQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_case_image 
+  		<include refid="where"/>
+  </select>
+
+	<select id="count" parameterType="string" resultType="integer">
+		select count(1) from material_case_image
+		where CASE_ID=#{caseId} and DATA_STATE='1'
+	</select>
+
+
+	<update id="updateBatchIds" parameterType="string">
+		update material_case_image set DATA_STATE='0'
+		where DATA_STATE='1'
+		and ID in
+		<foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<!-- 根据产品id查询关联图片 -->
+	<select id="selectVoByCaseId" parameterType="string" resultMap="BaseResultViewMap">
+		select <include refid="Base_Column_List"/> from material_case_image
+		where DATA_STATE='1'
+		and CASE_ID=#{caseId}
+		order by CREATE_TIME desc limit 1
+	</select>
+
+</mapper>

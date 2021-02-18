@@ -1,0 +1,8 @@
+//配置好菜单后删除文件
+材料信息 views/material/producer/material/MaterialList.html  layui-icon layui-icon-list
+轮播图管理 views/material/producer/materialbanner/MaterialBannerList.html layui-icon layui-icon-carousel
+产品报价管理 views/material/producer/materialproductprice/MaterialProductPriceList.html layui-icon layui-icon-form
+案例色卡分类管理 views/material/producer/materialcasecls/MaterialCaseClsList.html layui-icon layui-icon-date
+精品案例色卡信息管理 views/material/producer/materialcase/MaterialCaseList.html layui-icon layui-icon-layer
+产品介绍管理 views/material/producer/materialproductintroduction/MaterialProductIntroductionList.html layui-icon layui-icon-layouts
+施工说明管理 views/material/producer/materialbuildintroduction/MaterialBuildIntroductionList.html layui-icon layui-icon-tabs

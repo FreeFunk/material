@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>标题</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="MaterialProductPriceFileList-form" id="MaterialProductPriceFileList-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">文件名</label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" id="productPrice" name="productPrice"/>
+                        <input type="text" name="queryObj.fileName" placeholder="请输入文件名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-comm layui-btn-sm" data-type="reload" lay-submit lay-filter="MaterialProductPriceFile-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table id="MaterialProductPriceFile-list" lay-filter="MaterialProductPriceFile-list"></table>
+            <script type="text/html" id="table-MaterialProductPriceFile-list">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download">下载文件</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index:'lib/index',
+            common:'common',
+            $tool:'tool'
+        }).use(['index','table', 'form','common','$tool'], function(exports){
+            var $ = layui.$
+                ,table = layui.table
+                ,common = layui.common
+                ,$tool = layui.$tool
+                ,admin = layui.admin
+                ,form = layui.form;
+            var queryArgs = $tool.getUrlParams();//获取查询参数
+            var productId = queryArgs.id;
+
+            //查询
+            form.on('submit(MaterialProductPriceFile-search)', function(data){
+                var field = data.field;
+
+                //执行重载
+                table.reload('MaterialProductPriceFile-list', {
+                    where: field,page:{curr:1}
+                });
+            });
+
+            /*
+            * 定义表格
+            * */
+            defineTable = function () {
+                var productPrice = $("#productPrice").val();
+
+                var headers = layui.admin.getTokenHeader();
+                table.render({
+                    elem: '#MaterialProductPriceFile-list' //指定原始表格的选择器（id选择器）
+                    ,url:layui.setter.basePath +'/material/materialProductPriceFile/listpage.jsn' //模拟接口
+                    ,headers:headers
+                    ,where:{"queryObj.productPrice":productPrice}
+                    ,method: 'post'
+                    ,parseData: function(res){ //res 即为原始返回的数据
+                        return {
+                            "code": res.success, //解析接口状态
+                            "msg": res.errMsg, //解析提示文本
+                            "count": res.totalCount, //解析数据长度
+                            "data": res.list //解析数据列表
+                        };
+                    }
+                    ,response: {
+                        statusCode: true //规定成功的状态码，默认：0
+                    }
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                    ,{field: 'id',align: 'center', width: 200, title: '主键',sort: true,hide:true}
+                    ,{field: 'createTime',align: 'center', width: 160, title: '创建时间',templet: function(d){
+                    return common.DateFormat(d.createTime,"yyyy-MM-dd");},sort: true}
+            ,{field: 'fileName',align: 'center', width: 200, title: '文件名',sort: false}
+            ,{field: 'fileType',align: 'center', width: 100, title: '文件类型',sort: false}
+             ,{title: '操作', width: '20%', align: 'center', fixed: 'right', toolbar: '#table-MaterialProductPriceFile-list'}
+            ]]
+            ,autoSort: false
+                    ,page: true
+                    ,limit: 10
+                    ,limits: [10, 20, 30,40]
+                    ,text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+                //为toolbar添加事件响应
+                table.on('tool(MaterialProductPriceFile-list)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+                    /*var data = obj.data;*///获得当前行数据
+                    //区分事件
+                    switch(obj.event){
+                        case 'download':
+                            downloadVo(obj);
+                            break;
+                    };
+                });
+
+                //监听排序事件
+                table.on('sort(MaterialProductPriceFile-list)', function(obj){ //注：sort是工具条事件名，LAY-app-province-list是table原始容器的属性 lay-filter="对应的值"
+                    var sort = obj.field;
+                    //默认排序
+                    switch(obj.field){
+                        case 'id':
+                            sort ="ID";
+                            break;
+                        case 'createTime':
+                            sort ="CREATE_TIME";
+                            break;
+                        case 'createUserId':
+                            sort ="CREATE_USER_ID";
+                            break;
+                        case 'productPriceId':
+                            sort ="PRODUCT_PRICE_ID";
+                            break;
+                        case 'fileName':
+                            sort ="FILE_NAME";
+                            break;
+                        case 'fileType':
+                            sort ="FILE_TYPE";
+                            break;
+                        case 'fileUrl':
+                            sort ="FILE_URL";
+                            break;
+                        case 'orderNum':
+                            sort ="ORDER_NUM";
+                            break;
+                        case 'dataState':
+                            sort ="DATA_STATE";
+                            break;
+                    };
+                    if(obj.type==null){
+                        return;
+                    }
+                    //有些时候，你可能需要根据当前排序的字段，重新向服务端发送请求，从而实现服务端排序，如：
+                    table.reload('MaterialProductPriceFile-list', {
+                        initSort: obj//记录初始排序，如果不设的话，将无法标记表头的排序状态。
+                        ,where: { //请求参数（注意：这里面的参数可任意定义，并非下面固定的格式）
+                            orderBy: sort+" "+obj.type //排序字段
+                        }
+                    });
+                });
+            }
+            defineTable();
+
+            //下载文件
+            downloadVo = function (obj) {
+                //TODO
+                window.location.href = obj.data.fileUrl;
+            }
+
+        });
+
+</script>
+</body>
+</html>
+

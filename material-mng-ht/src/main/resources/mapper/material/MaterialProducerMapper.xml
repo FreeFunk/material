@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialProducerMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialProducer" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="CREATE_USER_NAME" property="createUserName"/>
+			<result column="PRODUCER_NAME" property="producerName"/>
+			<result column="CONTACT_USER_NAME" property="contactUserName"/>
+			<result column="CONTACT_PHONE_NUM" property="contactPhoneNum"/>
+			<result column="ADDRESS" property="address"/>
+			<result column="IS_NEED_SH" property="isNeedSh"/>
+			<result column="DATA_STATE" property="dataState"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialProducerView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, CREATE_USER_NAME, PRODUCER_NAME, CONTACT_USER_NAME, CONTACT_PHONE_NUM, ADDRESS, IS_NEED_SH, DATA_STATE
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		DATA_STATE='1'
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserName)'>
+		AND  CREATE_USER_NAME = #{queryObj.createUserName}
+		</if>
+		<if test='queryObj != null and  queryObj.producerName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.producerName)'>
+		AND  PRODUCER_NAME like concat('%',#{queryObj.producerName},'%')
+		</if>
+		<if test='queryObj != null and  queryObj.contactUserName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.contactUserName)'>
+		AND  CONTACT_USER_NAME = #{queryObj.contactUserName}
+		</if>
+		<if test='queryObj != null and  queryObj.contactPhoneNum != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.contactPhoneNum)'>
+		AND  CONTACT_PHONE_NUM = #{queryObj.contactPhoneNum}
+		</if>
+		<if test='queryObj != null and  queryObj.address != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.address)'>
+		AND  ADDRESS = #{queryObj.address}
+		</if>
+		<if test='queryObj != null and  queryObj.isNeedSh != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.isNeedSh)'>
+		AND  IS_NEED_SH = #{queryObj.isNeedSh}
+		</if>
+		<if test='queryObj != null and  queryObj.dataState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.dataState)'>
+		AND  DATA_STATE = #{queryObj.dataState}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialProducerQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_producer 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialProducerQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_producer 
+  		<include refid="where"/>
+  </select>
+
+	<!-- 逻辑删除 -->
+	<update id="logicDeleteById" parameterType="string">
+		update material_producer set DATA_STATE='0'
+		where ID=#{id}
+	</update>
+  
+  
+</mapper>

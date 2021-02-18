@@ -1,0 +1,31 @@
+{
+    "pages": [
+        "pages/databank/dataBankHome/dataBankHome",
+        "pages/discover/discoverHome/discoverHome",
+        "pages/mine/mine",
+        "pages/discover/discoverSearch/discoverSearch",
+        "pages/databank/colorCardDetail/colorCardDetail",
+        "pages/databank/caseDetail/caseDetail",
+        "pages/discover/discoverCase/discoverCase",
+        "pages/testView/testView",
+        "pages/databank/quotine/quotine",
+        "pages/databank/productDescription/productDescription",
+        "pages/databank/search/search",
+        "pages/databank/colorCard/colorCard",
+        "pages/databank/construction/construction",
+        "pages/databank/case/case",
+        "pages/discover/discoverCase/discoverCaseDetail/discoverCaseDetail",
+        "pages/mine/informDetail/informDetail",
+        "pages/mine/collectDetail/collectDetail",
+        "pages/mine/footmarkDetail/footmarkDetail",
+        "pages/databank/productStyle/productStyle"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "WeChat",
+        "navigationBarTextStyle": "black"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json"
+}

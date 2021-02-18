@@ -1,0 +1,62 @@
+<!-- 发现 案例 -->
+<import src="/pages/template/template.wxml" />
+<view class="con">
+	<view class="scroll">
+		<scroll-view bindscrolltolower="nextPage" scroll-into-view="{{toView}}" scroll-y bindscrolltolower="nextPage"
+			style="height:100%">
+			<!-- 图片加文字 -->
+			<view class="bg-white">
+				<image bindtap="previewImages" style="width:100%;" data-previewimglist="{{previewImgList}}"
+					mode="widthFix" data-imageurl="{{selectCase.orgImageUrl}}"
+					src="{{imageHost + selectCase.showImageUrl}}"></image>
+				<!-- 标题 -->
+				<view class="descDiv">
+					<view class="title">{{selectCase.caseName}}</view>
+					<!-- <view class="link" bindtap="jumpToSourceOfCurrentImage">前往图片源位置 > </view> -->
+					<view class="collecDownLoadDiv">
+						<view class="collect" bindtap="collectSuccess">
+							<image wx:if="{{selectCase.isCollection==0}}" src="/images/icon/collect.png"></image>
+							<image wx:if="{{selectCase.isCollection==1}}" src="/images/icon/collected.png"></image>
+							<text>收藏</text>
+						</view>
+						<view class="download" bindtap="downloadIng">
+							<image src="/images/icon/download.png"></image>
+							<text>下载原图</text>
+						</view>
+					</view>
+				</view>
+			</view>
+			<!-- 同类推荐 -->
+			<view class="sameRecomend">同类推荐</view>
+			<!-- 瀑布流 -->
+			<view class="sameRecomendWaterFull">
+				<!-- 瀑布流 -->
+				<view class="leftWater">
+					<block wx:for="{{leftList}}" wx:key="index">
+						<image bindtap="clickSimilarRecommendation" data-item="{{item}}" class="waterFullImage"
+							src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+					</block>
+				</view>
+				<view class="rightWater">
+					<block wx:for="{{rightList}}" wx:key="index">
+						<image bindtap="clickSimilarRecommendation" data-item="{{item}}" class="waterFullImage"
+							src="{{imageHost + item.showImageUrl}}" mode="widthFix"></image>
+					</block>
+				</view>
+			</view>
+			<view wx:if="{{similarRecommendationList.length==0}}" class="bg-white"
+				style="padding:50rpx;margin: 33rpx 9rpx;">
+				<view style="text-align:center;font-size:22rpx;">
+					<image style="width:100%;" src="/images/icon/nodata.jpg" mode="widthFix"></image>
+					暂无数据
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+
+</view>
+
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />
+<!-- 下载的弹窗 -->
+<template is="downloadIng" data="{{downloadIngFlag}}" />

@@ -1,0 +1,87 @@
+/* 案例详情 样式 */
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+page {
+    background-color: white;
+}
+
+/* 上面的图片 外层框 */
+.imageDiv {
+    border-bottom: 1px solid #f6f6f6;
+    height: 943rpx;
+    position: relative
+}
+
+/* 上面的图片 图片 */
+.imageDiv swiper {
+    width: 750rpx;
+    height: 870rpx;
+}
+.imageDiv swiper image {
+    width: 750rpx;
+    height: 870rpx;
+}
+
+/* 上面的图片 底部的编码文字 */
+.imageDiv view {
+    font-size: 24rpx;
+    height: 23rpx;
+    position: absolute;
+    bottom: 28rpx;
+    right: 23rpx;
+    color: #8c8c8c
+}
+
+/* 收藏 + 下载 的外层框 */
+.collecDownLoadDiv {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    margin-top: 31rpx;
+    right: 30rpx;
+}
+
+/* 收藏 外层框*/
+.collect {
+    width: 76rpx;
+    height: 26rpx;
+    margin-right: 31rpx;
+    line-height: 26rpx;
+    color: #333333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 收藏 图标*/
+.collect image {
+    width: 26rpx;
+    height: 26rpx;
+}
+
+/* 收藏 文字*/
+.collect text {
+    padding-left: 7rpx;
+    font-size: 20rpx;
+    color: #333333;
+}
+
+.download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 下载 图标*/
+.download image {
+    width: 26rpx;
+    height: 26rpx;
+}
+
+/* 下载 文字*/
+.download text {
+    padding-left: 6rpx;
+    font-size: 20rpx;
+    color: #333333;
+}

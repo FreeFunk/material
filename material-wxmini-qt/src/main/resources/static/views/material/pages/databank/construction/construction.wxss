@@ -1,0 +1,60 @@
+/* 施工说明 css样式 */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+/* 白色背景的外层框 */
+.card {
+    width: 728rpx;
+    margin-top: 20rpx;
+    margin-left: 11rpx;
+    padding-top: 30rpx;
+    padding-bottom: 1rpx;
+    margin-right: 11rpx;
+    min-height: 100rpx;
+    border-radius: 3rpx;
+}
+
+/* 标题 */
+.title {
+    margin-left: 14rpx;
+    margin-right: 14rpx;
+    padding-left: 1rpx;
+}
+
+/* 标题图标 */
+.title image {
+    width: 41rpx;
+    height: 30rpx;
+    margin-right: 30rpx;
+}
+
+/* 标题文字 */
+.title text {
+    font-size: 27rpx;
+    padding-bottom: 2rpx;
+    color: #000000
+}
+
+/* 主要内容 */
+.content {
+    margin-top: 32rpx;
+    font-size: 26rpx;
+    margin-left: 16rpx;
+    margin-right: 16rpx;
+    line-height: 48rpx;
+    text-indent: 50rpx;
+}
+
+/* 视频的外层 */
+.videoDiv {
+    margin: 30rpx 14rpx;
+    display: flex;
+    justify-content: center;
+}
+
+/* 视频的样式 */
+video {
+    width: 100%;
+    border-radius: 6rpx;
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<style>
+    li{
+        display: inline-block;
+        margin-left: 20px;
+        margin-top: 10px;
+    }
+    img{
+        width: 200px;
+        height: 200px;
+        margin-left: 5px;
+        margin-top: 5px;
+    }
+    .imgCon{
+        width: 210px;
+        height: 210px;
+        border: 1px solid darkgray;
+    }
+</style>
+<body>
+
+<div class="layui-form" lay-filter="MaterialBannerImageList-form" id="MaterialBannerImageList-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">轮播图片列表</label>
+            <div class="layui-input-block">
+                <input type="hidden" name="imageUrl" id="imageUrl"/>
+            </div>
+        </div>
+        <div id="bannerListCon" class="layui-form-item">
+
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialLabel-form-edit" id="MaterialLabel-form-edit" value="确认编辑">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            $tool:'tool'
+        }).use(['index', 'form','$tool','laydate'], function(){
+
+            var $ = layui.$
+                ,$tool = layui.$tool
+                ,laydate = layui.laydate
+                ,admin = layui.admin
+                ,form = layui.form;
+
+            //初始化轮播图片列表
+            function initBannerImgList(){
+                var imageUrl = $("#imageUrl").val();
+                var imageUrlArr = imageUrl.split(",");
+                var html = "<ul>";
+                for(var i=0;i<imageUrlArr.length;i++){
+                    html += "<li><div class='imgCon'><img src='"+imageUrlArr[i]+"'/></div></li>"
+                }
+                html += "</ul>";
+                $("#bannerListCon").html(html);
+            }
+            initBannerImgList();
+        })
+</script>
+</body>
+</html>

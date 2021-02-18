@@ -1,0 +1,42 @@
+<!--材料库-查询-->
+<import src="/pages/template/template.wxml" />
+<!-- 搜索框 -->
+<view class="cu-bar search">
+	<view class="search-form round">
+		<text class="cuIcon-search"></text>
+		<input type="text" focus="{{inputShowed}}" bindinput="searchByInput" placeholder="搜索材料"
+			value="{{searchLabelName}}" confirm-type="搜索"></input>
+	</view>
+	<view  class="cancel">
+		<text bindtap="cancelSearch">取消</text>
+	</view>
+</view>
+<view wx:if="{{searchDivFlag && materialListBySearch.length>0}}" class="bg-white shadow allHideTags search_dialog">
+	<view wx:if="{{materialListBySearch.length>0}}" class="content">
+		<block wx:for="{{materialListBySearch}}">
+			<view data-item="{{item}}" bindtap="clickSearchLabel">{{item.caseName}}</view>
+		</block>
+	</view>
+	<view wx:if="{{materialListBySearch.length==0}}" class="search_nodata">
+		暂无相应数据
+	</view>
+</view>
+<!-- 全部材料标签 -->
+<view wx:if="{{materialRecomendation.length>0}}" bindtap="loseInput" class="allTags"
+	style="min-height:{{ktxWindowHeight-64-98}}rpx;">
+	<view class="action">
+		<text class="cuIcon-titles" style="color:#e72119;font-size:26rpx;"></text>热门推荐
+	</view>
+	<view wx:if="{{materialRecomendation.length>0}}" class="content">
+		<block wx:for="{{materialRecomendation}}">
+			<view bindtap="clickRecomendationTag" data-labelname="{{item.labelName}}">{{item.labelName}}</view>
+		</block>
+	</view>
+	<view wx:if="{{materialRecomendation.length==0}}" class="content"
+		style="text-align:center;font-size:24rpx;color:#999999">
+		暂无相应数据
+	</view>
+</view>
+
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

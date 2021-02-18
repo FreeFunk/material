@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialAboutUsMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialAboutUs" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="CREATE_USER_NAME" property="createUserName"/>
+			<result column="FILE_TYPE" property="fileType"/>
+			<result column="FILE_URL" property="fileUrl"/>
+			<result column="TEXT_CONTENT" property="textContent"/>
+			<result column="DATA_STATE" property="dataState"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialAboutUsView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, CREATE_USER_NAME, FILE_TYPE, FILE_URL, TEXT_CONTENT, DATA_STATE
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		DATA_STATE='1'
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserName)'>
+		AND  CREATE_USER_NAME = #{queryObj.createUserName}
+		</if>
+		<if test='queryObj != null and  queryObj.fileType != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileType)'>
+		AND  FILE_TYPE = #{queryObj.fileType}
+		</if>
+		<if test='queryObj != null and  queryObj.fileUrl != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileUrl)'>
+		AND  FILE_URL = #{queryObj.fileUrl}
+		</if>
+		<if test='queryObj != null and  queryObj.textContent != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.textContent)'>
+		AND  TEXT_CONTENT = #{queryObj.textContent}
+		</if>
+		<if test='queryObj != null and  queryObj.dataState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.dataState)'>
+		AND  DATA_STATE = #{queryObj.dataState}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialAboutUsQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_about_us 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialAboutUsQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_about_us 
+  		<include refid="where"/>
+  </select>
+
+	<!-- 逻辑删除 -->
+	<update id="logicDeleteById" parameterType="string">
+		update material_about_us set DATA_STATE='0'
+		where ID=#{id}
+	</update>
+
+	<!-- 根据当前用户加载信息 -->
+	<select id="loadInfoByUser" parameterType="string" resultMap="BaseResultViewMap">
+		select <include refid="Base_Column_List"/> from material_about_us
+		where DATA_STATE='1'
+		and CREATE_USER_ID=#{userId}
+	</select>
+  
+</mapper>

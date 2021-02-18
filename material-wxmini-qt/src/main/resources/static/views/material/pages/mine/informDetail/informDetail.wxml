@@ -1,0 +1,25 @@
+<!-- 通告点进去的界面 -->
+<import src="/pages/template/template.wxml" />
+<!-- 中间的内容展示区域 -->
+<view class="bg-white card" style="min-height:{{ktxWindowHeight-130}}rpx;">
+	<view style="min-height:{{ktxWindowHeight-350}}rpx;">
+		<!-- 标题 -->
+		<view class="title">
+			<view>{{infromObj.messageTitle}}</view>
+		</view>
+		<!-- 内容 -->
+		<view class="content">
+			{{infromObj.messageContent}}
+		</view>
+		<!-- 图片内容 -->
+		<view class="imageDiv" >
+			<image style="width:100%;" bindtap="previewImages" mode="widthFix" data-previewimglist="{{previewImgList}}" data-imageurl="{{infromObj.messageImage}}" src="{{imageHost + infromObj.messageImage}}"></image>
+		</view>
+	</view>
+	<view class="timeAndAuthor">
+		<view>{{infromObj.createTime}}</view>
+		<view>非森小程序</view>
+	</view>
+</view>
+<!-- 底部导航栏 -->
+<template is="navBottom" data="{{selectNav}}" />

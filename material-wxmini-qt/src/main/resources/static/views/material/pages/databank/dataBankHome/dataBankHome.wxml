@@ -1,0 +1,155 @@
+<!-- 资料库主页 -->
+<import src="/pages/template/template.wxml" />
+<!-- 搜索框 -->
+<view class="cu-bar bg-white search_border_bottom fixed">
+	<view class="search-form round">
+		<text class="cuIcon-search"></text>
+		<input disabled="disabled" value="{{searchDirection}}" type="text" placeholder="搜索材料" focus="false" bindtap="searchForMaterial"></input>
+	</view>
+</view>
+<!-- 垂直导航 + （轮播图 + 卡片列表点击左侧导航栏右边进行响应的跳转功能>） -->
+<view class="VerticalBox" style="height:100%;">
+	<!-- 左侧的垂直导航 -->
+	<scroll-view class="bg-white VerticalNav nav" scroll-y scroll-with-animation scroll-top="0">
+		<view style="display: flex;height:100rpx;align-items: center;justify-content: center;" class="cu-item" wx:for="{{labelListData}}" bindtap='tabSelect' wx:key="index" data-id="{{index}}" data-currentMaterial='{{item}}'>
+			<view class="{{item.id==selectMaterial.id?'selectTitleTab':'titleTab'}}">
+				{{item.materialName}}
+			</view>
+		</view>
+	</scroll-view>
+	<!-- 轮播图 + 卡片列表 -->
+	<view class="swiper_card_list" style="width:{{750-160}}rpx">
+		<!-- 卡片列表 -->
+		<scroll-view class="VerticalMain" scroll-y scroll-with-animation>
+			<!-- 产品报价 -->
+			<view wx:if="{{isPowerFlag}}" class="padding-lr" bindtap="jumpToSomeWhere" data-pagename="jumpToQuotine">
+				<!-- 标题 -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品报价</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content">
+					<image wx:if="{{selectMaterial.productPriceImage!=''&&selectMaterial.productPriceImage!=undefined}}" class="image_long" src="{{imageHost + selectMaterial.productPriceImage}}"></image>
+					<image wx:if="{{selectMaterial.productPriceImage==''||selectMaterial.productPriceImage==undefined}}" class="image_long" src="/images/icon/nodata.jpg"></image>
+				</view>
+			</view>
+			<!-- 产品案例 -->
+			<view class="padding-lr">
+				<!-- 标题 + ··· -->
+				<view class="title" bindtap="jumpToSomeWhere" data-pagename='jumpToCase'>
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品案例</view>
+					<image class="image_more" src="/images/icon/more.png"></image>
+				</view>
+				<!-- 精品案例分为两层，上面三个下面三个 -->
+				<view class="caseColorCssImgDiv">
+					<view class="bigPic">
+						<image wx:if="{{caseObjOne!=undefined}}"  bindtap="jumpToCaseWithTag" data-item="{{caseObjOne}}" src="{{imageHost+caseObjOne.imageUrl}}"></image>
+						<image wx:if="{{caseObjOne==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{caseObjOne!=undefined}}"  bindtap="jumpToCaseWithTag" data-item="{{caseObjOne}}">{{caseObjOne.caseClsName}}</view>
+						<view wx:if="{{caseObjOne==undefined}}">暂无数据</view>
+					</view>
+					<view class="twoSmall">
+						<image bindtap="jumpToCaseWithTag" data-item="{{caseObjTwo}}" wx:if="{{caseObjTwo!=undefined}}" src="{{imageHost+caseObjTwo.imageUrl}}"></image>
+						<image wx:if="{{caseObjTwo==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{caseObjTwo!=undefined}}" class="topText">{{caseObjTwo.caseClsName}}</view>
+						<view wx:if="{{caseObjTwo==undefined}}" class="topText">暂无数据</view>
+
+						<image wx:if="{{caseObjThree!=undefined}}" bindtap="jumpToCaseWithTag" data-item="{{caseObjThree}}" src="{{imageHost+caseObjThree.imageUrl}}"></image>
+						<image wx:if="{{caseObjThree==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{caseObjThree!=undefined}}" class="bottomText">{{caseObjThree.caseClsName}}</view>
+						<view wx:if="{{caseObjThree==undefined}}" class="bottomText">暂无数据</view>
+					</view>
+				</view>
+			</view>
+			<!-- 产品色卡 -->
+			<view class="padding-lr">
+				<!-- 标题 + ··· -->
+				<view class="title" bindtap="jumpToSomeWhere" data-pagename="colorCard">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品色卡</view>
+					<image class="image_more" src="/images/icon/more.png"></image>
+				</view>
+				<view class="caseColorCssImgDiv">
+					<view bindtap="jumpToColorCardWithTag" data-item="{{colorCardListDataOne}}" class="bigPic">
+						<image wx:if="{{colorCardListDataOne!=undefined}}"  src="{{imageHost+colorCardListDataOne.imageUrl}}"></image>
+						<image wx:if="{{colorCardListDataOne==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{colorCardListDataOne!=undefined}}">{{colorCardListDataOne.caseClsName}}</view>
+						<view wx:if="{{colorCardListDataOne==undefined}}">暂无数据</view>
+					</view>
+					<view class="twoSmall">
+						<image bindtap="jumpToColorCardWithTag" data-item="{{colorCardListDataTwo}}" wx:if="{{colorCardListDataTwo!=undefined}}" src="{{imageHost+colorCardListDataTwo.imageUrl}}"></image>
+						<image wx:if="{{colorCardListDataTwo==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{colorCardListDataTwo!=undefined}}" class="topText">{{colorCardListDataTwo.caseClsName}}</view>
+						<view wx:if="{{colorCardListDataTwo==undefined}}" class="topText">暂无数据</view>
+
+						<image wx:if="{{colorCardListDataThree!=undefined}}" bindtap="jumpToColorCardWithTag" data-item="{{colorCardListDataThree}}" src="{{imageHost+colorCardListDataThree.imageUrl}}"></image>
+						<image wx:if="{{colorCardListDataThree==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{colorCardListDataThree!=undefined}}" class="bottomText">{{colorCardListDataThree.caseClsName}}</view>
+						<view wx:if="{{colorCardListDataThree==undefined}}" class="bottomText">暂无数据</view>
+					</view>
+				</view>
+			</view>
+			<!-- 产品样式 -->
+			<view class="padding-lr" bindtap="jumpToProductStyle" wx:if="{{selectMaterial.isShowProductStyle==1}}">
+				<!-- 标题 + ··· -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品样式</view>
+					<image class="image_more" src="/images/icon/more.png"></image>
+				</view>
+				<view class="caseColorCssImgDiv">
+					<!-- 大的 -->
+					<view class="bigPic">
+						<image wx:if="{{productStyleObjOne!=undefined}}" src="{{imageHost+productStyleObjOne.showImageUrl}}"></image>
+						<image wx:if="{{productStyleObjOne==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{productStyleObjOne!=undefined}}">{{productStyleObjOne.styleName}}</view>
+						<view wx:if="{{productStyleObjOne==undefined}}">暂无数据</view>
+					</view>
+					<view class="twoSmall">
+						<!-- 上面 -->
+						<image wx:if="{{productStyleObjTwo!=undefined}}" src="{{imageHost+productStyleObjTwo.showImageUrl}}"></image>
+						<image wx:if="{{productStyleObjTwo==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{productStyleObjTwo!=undefined}}" class="topText">{{productStyleObjTwo.styleName}}</view>
+						<view wx:if="{{productStyleObjTwo==undefined}}" class="topText">暂无数据</view>
+						<!-- 下面 -->
+						<image wx:if="{{productStyleObjThree!=undefined}}" src="{{imageHost+productStyleObjThree.showImageUrl}}"></image>
+						<image wx:if="{{productStyleObjThree==undefined}}" src="/images/icon/nodata.jpg"></image>
+						<view wx:if="{{productStyleObjThree!=undefined}}" class="bottomText">{{productStyleObjThree.styleName}}</view>
+						<view wx:if="{{productStyleObjThree==undefined}}" class="bottomText">暂无数据</view>
+					</view>
+				</view>
+			</view>
+			<!-- 产品介绍 -->
+			<view class="padding-lr" bindtap='jumpToSomeWhere' data-pagename='jumpToProductionDescription'>
+				<!-- 标题 -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>产品介绍</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content" bindtap="selectShiGong">
+					<image wx:if="{{selectMaterial.productIntroductionImage!=''&&selectMaterial.productIntroductionImage!=undefined}}" class="image_long" src="{{imageHost + selectMaterial.productIntroductionImage}}"></image>
+					<image wx:if="{{selectMaterial.productIntroductionImage==''||selectMaterial.productIntroductionImage==undefined}}" class="image_long" src="/images/icon/nodata.jpg"></image>
+				</view>
+			</view>
+			<!-- 施工说明 -->
+			<view class="padding-lr" style="margin-bottom:20rpx;" bindtap='jumpToSomeWhere' data-pagename="jumpToConstruction">
+				<!-- 标题 -->
+				<view class="title">
+					<image class="image_logo" src="/images/icon/materialBase_logo.png"></image>
+					<view>施工说明</view>
+				</view>
+				<!-- 长图片 -->
+				<view class="content" bingtap='tabSelect'>
+					<image wx:if="{{selectMaterial.buildIntroductionImage!=''&&selectMaterial.buildIntroductionImage!=undefined}}" class="image_long" src="{{imageHost + selectMaterial.buildIntroductionImage}}"></image>
+					<image wx:if="{{selectMaterial.buildIntroductionImage==''||selectMaterial.buildIntroductionImage==undefined}}" class="image_long" src="/images/icon/nodata.jpg"></image>
+				</view>
+			</view>
+		</scroll-view>
+	</view>
+</view>
+<template is="navBottom" data="{{selectNav}}" />
+<template is="getPhoneNum" data="{{getPhoneNumFlag}}" />
+<template is="getPermission" data="{{getPermissionFlag}}" />

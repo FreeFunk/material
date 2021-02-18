@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html id="materialContent">
+<head>
+    <meta charset="utf-8">
+    <title>产品案例/色卡</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<style>
+    .imgStyle{
+        width:80%;
+        height:200px;
+        margin-left:10%;
+    }
+</style>
+<body>
+
+<div class="layui-form" lay-filter="MaterialDetail-form" id="MaterialDetail-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+
+        <div class="layui-form-item layui-hide">
+            <label class="layui-form-label">主键</label>
+            <div class="layui-input-block">
+                <input type="text" id="id" disabled class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">案例/色卡</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="caseName" disabled class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">图片名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="imageTitle" disabled class="layui-input">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item" style="width: 96%;margin-left: 4%;">
+            <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">缩略图</div>
+                    <div class="layui-card-body">
+                        <img id="caseMiniImg" onclick="getImg(this)" class="imgStyle" src=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs4 layui-col-sm12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">展示图</div>
+                    <div class="layui-card-body">
+                        <img id="showImageUrl" onclick="getImg(this)" class="imgStyle" src=""/>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-xs4 layui-col-sm12 layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">原图</div>
+                    <div class="layui-card-body">
+                        <img id="orgImageUrl" onclick="getImg(this)" class="imgStyle" src=""/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="Material-form-detail" id="Material-form-detail" value="提交审核">
+    </div>
+</div>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index', //主入口模块
+            $tool:'tool',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','$tool','laydate','viewer','upload'], function(){
+
+            var $ = layui.$
+                ,$tool = layui.$tool
+                ,laydate = layui.laydate
+                ,admin = layui.admin
+                ,upload  = layui.upload
+                ,viewer = layui.viewer
+                ,form = layui.form;
+
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+
+            var imgHost = layui.setter.ImgPath;
+
+            //加载产品信息
+            loadInfoById();
+
+            function loadInfoById(){
+                var id = $("#id").val();
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialCaseImage/loadById.jsn",
+                    method:'post',
+                    data:{"id":id},
+                    success:function(data){
+                        if(data.success){
+                            //展示审核页面
+                            var caseImgVo = data.data;
+                            $("#imageTitle").val(caseImgVo.imageTitle);
+                            $("#caseMiniImg").attr("src",imgHost+caseImgVo.caseMiniImg);
+                            $("#showImageUrl").attr("src",imgHost+caseImgVo.showImageUrl);
+                            $("#orgImageUrl").attr("src",imgHost+caseImgVo.orgImageUrl);
+
+                            var caseId = caseImgVo.caseId;
+                            loadCaseInfoById(caseId);
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+            //加载案例信息
+            function loadCaseInfoById(caseId){
+                admin.req({
+                    url: layui.setter.basePath + "/material/materialCase/loadById.jsn",
+                    method:'post',
+                    data:{"id":caseId},
+                    success:function(data){
+                        if(data.success){
+                            $("#caseName").val(data.data.caseName);
+                        }else{
+                            layer.msg(data.errMsg);
+                        }
+                    }
+                });
+            }
+
+        })
+</script>
+</body>
+</html>

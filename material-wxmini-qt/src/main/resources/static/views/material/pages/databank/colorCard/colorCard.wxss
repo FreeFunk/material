@@ -1,0 +1,48 @@
+/* 单个卡片的最外层 */
+
+/* 导入底部导航栏的样式 */
+@import "/pages/template/template.wxss";
+
+.colorCardDiv {
+    position: relative
+}
+
+/* 收藏图标的外层白底框 */
+.colorCardCollect {
+    width: 39rpx;
+    height: 39rpx;
+    background-color: white;
+    border-radius: 4rpx;
+    position: absolute;
+    bottom: 12rpx;
+    right: 8rpx;
+}
+
+/* 收藏图标 */
+.colorCardCollect image {
+    width: 26rpx;
+    height: 26rpx;
+    margin-top: 7rpx;
+    margin-left: 7rpx;
+}
+
+page {
+    height: 100%;
+}
+
+.con {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.top {
+    font-size: 32rpx;
+    padding-top: 90rpx;
+}
+
+.scroll {
+    flex: 1;
+    overflow: scroll;
+    padding-bottom: 100rpx;
+}

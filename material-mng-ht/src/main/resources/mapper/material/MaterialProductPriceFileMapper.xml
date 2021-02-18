@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialProductPriceFileMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialProductPriceFile" >
+			<id column="ID" property="id"/>
+			<result column="CREATE_TIME" property="createTime"/>
+			<result column="CREATE_USER_ID" property="createUserId"/>
+			<result column="PRODUCT_PRICE_ID" property="productPriceId"/>
+			<result column="FILE_NAME" property="fileName"/>
+			<result column="FILE_TYPE" property="fileType"/>
+			<result column="FILE_URL" property="fileUrl"/>
+			<result column="ORDER_NUM" property="orderNum"/>
+			<result column="DATA_STATE" property="dataState"/>
+			<result column="SH_STATE" property="shState"/>
+			<result column="NOT_PASS_TEXT" property="notPassText"/>
+			<result column="SH_USER_ID" property="shUserId"/>
+			<result column="SH_USER_NAME" property="shUserName"/>
+			<result column="SH_TIME" property="shTime"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialProductPriceFileView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, CREATE_TIME, CREATE_USER_ID, PRODUCT_PRICE_ID, FILE_NAME, FILE_TYPE, FILE_URL, ORDER_NUM, DATA_STATE,
+	 SH_STATE, NOT_PASS_TEXT, SH_USER_ID, SH_USER_NAME, SH_TIME
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		DATA_STATE='1'
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.createTime != null'>
+			AND  CREATE_TIME = #{queryObj.createTime}
+		</if>
+		<if test='queryObj != null and  queryObj.createUserId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.createUserId)'>
+		AND  CREATE_USER_ID = #{queryObj.createUserId}
+		</if>
+		<if test='queryObj != null and  queryObj.productPriceId != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.productPriceId)'>
+		AND  PRODUCT_PRICE_ID = #{queryObj.productPriceId}
+		</if>
+		<if test='queryObj != null and  queryObj.fileName != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileName)'>
+		AND  FILE_NAME LIKE concat('%',#{queryObj.fileName},'%')
+		</if>
+		<if test='queryObj != null and  queryObj.fileType != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileType)'>
+		AND  FILE_TYPE LIKE concat('%',#{queryObj.fileType},'%')
+		</if>
+		<if test='queryObj != null and  queryObj.fileUrl != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.fileUrl)'>
+		AND  FILE_URL = #{queryObj.fileUrl}
+		</if>
+		<if test='queryObj != null and  queryObj.dataState != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.dataState)'>
+		AND  DATA_STATE = #{queryObj.dataState}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialProductPriceFileQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_product_price_file 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialProductPriceFileQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_product_price_file
+  		<include refid="where"/>
+  </select>
+
+	<select id="selectCountNum" parameterType="string" resultType="integer">
+		select count(1) from material_product_price_file
+		where DATA_STATE='1' and  PRODUCT_PRICE_ID = #{pirceId}
+	</select>
+
+	<update id="updateByDataState" parameterType="string">
+		update material_product_price_file set DATA_STATE='0'
+		where DATA_STATE='1'
+		and ID in
+		<foreach item="id" index="index" collection="list" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<!-- 根据产品报价查询 -->
+	<select id="listByPriceId" parameterType="string" resultMap="BaseResultViewMap">
+		select <include refid="Base_Column_List"/> from material_product_price_file
+		where DATA_STATE='1'
+		and PRODUCT_PRICE_ID = #{pirceId}
+	</select>
+
+</mapper>

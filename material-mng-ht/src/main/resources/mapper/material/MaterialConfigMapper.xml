@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.edgedo.material.mapper.MaterialConfigMapper" >
+   
+   
+    <resultMap id="BaseResultMap" type="com.edgedo.material.entity.MaterialConfig" >
+			<id column="ID" property="id"/>
+			<result column="VALUE" property="value"/>
+			<result column="REMARK" property="remark"/>
+			<result column="UPDATE_TIME" property="updateTime"/>
+    </resultMap>
+   
+    <resultMap id="BaseResultViewMap" type="com.edgedo.material.queryvo.MaterialConfigView" extends="BaseResultMap">
+    
+    </resultMap>
+  
+  
+  <!-- ******* 新增字段请修改这里  ******  -->
+  <sql id="Base_Column_List">
+	 ID, VALUE, REMARK, UPDATE_TIME
+  </sql>
+  
+  <!-- ******* 利用好这里的动态查询条件  ******  -->
+  <sql id="where">
+  	<where>
+		<if test='queryObj != null and  queryObj.id != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.id)'>
+		AND  ID = #{queryObj.id}
+		</if>
+		<if test='queryObj != null and  queryObj.value != null and @org.apache.commons.lang3.StringUtils@isNotEmpty(queryObj.value)'>
+		AND  VALUE = #{queryObj.value}
+		</if>
+		<if test="queryObj != null and  queryObj.remark != null and queryObj.remark !=''">
+		AND  REMARK LIKE concat('%',#{queryObj.remark},'%')
+		</if>
+		<if test='queryObj != null and  queryObj.updateTime != null'>
+			AND  UPDATE_TIME = #{queryObj.updateTime}
+		</if>
+  	</where>
+  	
+  </sql>
+  
+  <!-- ******* 排序判断  ******  
+  <sql id="orderBy">
+  	<if test="orderBy != null and orderBy!= '' ">
+  		order by  ${orderBy}
+  	</if>
+  </sql>-->
+  
+  
+  <!-- 分页条件查询  -->
+  <select id="listPage" parameterType="com.edgedo.material.queryvo.MaterialConfigQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_config 
+  		<include refid="where"/>
+  </select>
+  
+   <!-- 不分页条件查询  -->
+  <select id="listByObj" parameterType="com.edgedo.material.queryvo.MaterialConfigQuery" resultMap="BaseResultViewMap">
+  		select <include refid="Base_Column_List"/> from material_config 
+  		<include refid="where"/>
+  </select>
+  
+  
+</mapper>

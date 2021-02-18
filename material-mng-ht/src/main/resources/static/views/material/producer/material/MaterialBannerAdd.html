@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/layuiadmin/style/app.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="MaterialBanner-form" id="MaterialBanner-form" style="padding: 20px 30px 0 0;">
+    <div class="layui-row">
+        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">所属材料ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="materialId" lay-verify="required" placeholder="请输入所属材料ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">材料名称</label>
+            <div class="layui-input-block">
+                <select name="materialId" id="materialId" lay-filter="materialId"  lay-verify="required">
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">轮播图</label>
+            <div class="layui-input-block">
+                <div class="layui-upload">
+                    <button type="button" class="layui-btn" id="imageUrlUpload">上传图片</button>
+                    <div class="layui-upload-list">
+                        <label class="layui-form-label" style="position: absolute;font-size:13px;left: -119%;">封面图</label>
+                        <img onclick="getImg(this)" style="height: 50px;" class="layui-upload-img" id="imageUrlShow">
+                        <input type="hidden" id="imageUrl" name="imageUrl"  class="layui-input">
+                        <!--<p id="demoText"></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序号</label>
+                <div class="layui-input-block">
+                    <input type="text" name="orderNum" lay-verify="required|number" placeholder="请输入排序号" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+       <!-- <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">是否启用</label>
+                <div class="layui-input-block">
+                    <input type="text" name="isEnable" lay-verify="required" placeholder="请输入是否启用" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核状态(审核中：0，通过：1，未通过：-1)</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shState" lay-verify="required" placeholder="请输入审核状态(审核中：0，通过：1，未通过：-1)" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">未通过原因</label>
+                <div class="layui-input-block">
+                    <input type="text" name="notPassText" lay-verify="required" placeholder="请输入未通过原因" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核人ID</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shUserId" lay-verify="required" placeholder="请输入审核人ID" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核人名</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shUserName" lay-verify="required" placeholder="请输入审核人名" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">审核时间</label>
+                <div class="layui-input-block">
+                    <input type="text" name="shTime" id="shTime" lay-verify="required" placeholder="请输入审核时间" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="MaterialBanner-form-submit" id="MaterialBanner-form-submit" value="确认添加">
+    </div>
+</div>
+<script id="materialNameSelect" type="text/html">
+    <option value="">请选择材料</option>
+    {{#  layui.each(d.data, function(index, item){ }}
+    <option value="{{item.id}}">{{ item.materialName }}</option>
+    {{#  }); }}
+</script>
+
+<script src="/layuiadmin/layui/layui.js"></script>
+<script>
+        layui.config({
+            base: '/layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index',
+            viewer: 'layui_ext/viewer/viewer'
+        }).use(['index', 'form','laydate','laytpl','viewer','upload'], function(){
+            var $ = layui.$
+                ,laydate = layui.laydate
+                ,upload  = layui.upload
+                ,admin  = layui.admin
+                ,viewer = layui.viewer
+                ,laytpl = layui.laytpl
+                ,form = layui.form;
+
+            //查询该学校下面的专业信息
+            function selectMaterialList(){
+                admin.req({
+                    url:layui.setter.basePath + "/material/material/materialNameAllProdouce.jsn",
+                    data:{},
+                    method:'post',
+                    async:false,
+                    success:function(data){
+                        if(data.success){
+                            var getTpl = document.getElementById("materialNameSelect").innerHTML,
+                                view = document.getElementById("materialId");
+                            laytpl(getTpl).render(data,function(html){
+                                view.innerHTML = html;
+                                form.render();
+                            })
+                        }
+                    }
+                })
+            }
+            selectMaterialList();
+
+
+            var headers = layui.admin.getTokenHeader();
+            var imageUrlUpload = upload.render({
+                elem: '#imageUrlUpload'
+                ,url: layui.setter.basePath +'/material/common/uploadTempFile.jsn' //改成您自己的上传接口
+                ,headers:headers
+                ,accept:'images'
+                ,acceptMime:'image/*'
+                ,size:5120*10 //设置文件最大可允许上传的大小，单位 KB
+                ,before: function(obj){
+                    //预读本地文件示例，不支持ie8
+                    obj.preview(function(index, file, result){
+                        $('#imageUrlShow').attr('src', result); //图片链接（base64）
+                    });
+                }
+                ,done: function(res){
+                    //如果上传失败
+                    if(res.code > 0){
+                        return layer.msg('上传失败');
+                    }
+                    //上传成功
+                    $("#imageUrl").val(res.data);
+                }
+            });
+            //点击图片变大
+            getImg = function (value) {
+                $(value.parentElement.parentElement).viewer();
+            }
+            //监听提交
+            form.on('submit(MaterialBanner-form-submit)', function(data){
+                var field = data.field; //获取提交的字段
+                var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                //提交 Ajax 成功后，关闭当前弹层并重载表格
+                admin.req({
+                    url:layui.setter.basePath +'/material/materialBanner/insertProdouceBanner.jsn',
+                    data:field,
+                    method:"post",
+                    success:function (data) {
+                        if(data.success){
+                            parent.layui.table.reload('MaterialBanner-list'); //重载表格
+                            parent.layer.close(index); //再执行关闭
+                            parent.layer.msg('添加成功', {
+                                icon: 1
+                            });
+                        }else{
+                            parent.layer.msg(data.errMsg, {
+                            });
+                        }
+
+                    },
+                });
+
+            });
+            laydate.render({
+                elem: '#createTime', //指定元素
+                type:'datetime'
+            });
+            laydate.render({
+                elem: '#shTime', //指定元素
+                type:'datetime'
+            });
+        })
+</script>
+</body>
+</html>
